@@ -1,69 +1,160 @@
 // scripts/translator.mjs
-// Traduz texto para pt-BR via LibreTranslate (ou outro endpoint compatível).
-// Se LT_ENDPOINT/LT_API_KEY forem definidos nos "Secrets", usa-os.
-// Caso contrário, usa o endpoint público padrão (pode ser instável).
+// Tradutor robusto p/ pt-BR usando LibreTranslate-compat.
+// - Usa LT_ENDPOINT/LT_API_KEY se definidos (Secrets).
+// - Faz retries com backoff e tem endpoints de fallback.
+// - Aceita respostas {translatedText} ou [{translatedText}].
+// - Para HTML de <p>...</p>, decodifica entidades antes e reescapa após.
 
-const DEFAULT_ENDPOINT = 'https://libretranslate.com/translate';
+// ---------- Config ----------
+const PRIMARY_ENDPOINT = process.env.LT_ENDPOINT || 'https://libretranslate.com/translate';
+// Endpoints de fallback (pode ajustar/encurtar depois se quiser)
+const FALLBACK_ENDPOINTS = [
+  'https://translate.terraprint.co/translate',
+  'https://libretranslate.de/translate',
+];
 
-// Divide textos longos em blocos menores (seguro p/ API)
-function chunk(str, size = 4500) {
-  const parts = [];
-  for (let i = 0; i < str.length; i += size) parts.push(str.slice(i, i + size));
-  return parts;
+const API_KEY = process.env.LT_API_KEY || undefined;
+
+// ---------- Utils ----------
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+function chunk(str, size = 4000) {
+  if (!str) return [''];
+  const out = [];
+  let i = 0;
+  while (i < str.length) {
+    out.push(str.slice(i, i + size));
+    i += size;
+  }
+  return out;
 }
 
+// Decodifica entidades HTML simples para mandar texto limpo à API
+function htmlDecode(s = '') {
+  return s
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+}
+
+// Reescapa após traduzir para voltar seguro ao HTML
+function htmlEncode(s = '') {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// Lê a resposta da API em ambos os formatos
+async function parseLTResponse(res) {
+  if (!res.ok) {
+    const txt = await res.text().catch(() => '');
+    throw new Error(`LibreTranslate HTTP ${res.status} ${txt ? '- ' + txt.slice(0, 120) : ''}`);
+  }
+  const data = await res.json().catch(() => ({}));
+  if (Array.isArray(data)) {
+    const t = data[0]?.translatedText;
+    if (typeof t === 'string' && t.length) return t;
+  } else if (data && typeof data.translatedText === 'string') {
+    return data.translatedText;
+  }
+  // fallback se vier em formato estranho
+  return '';
+}
+
+async function requestLT(endpoint, q, { source = 'auto', target = 'pt', format = 'text' } = {}) {
+  const body = { q, source, target, format };
+  if (API_KEY) body.api_key = API_KEY;
+
+  const res = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  return parseLTResponse(res);
+}
+
+// ---------- API: translate (texto plano) ----------
 export async function translate(text, { target = 'pt', source = 'auto' } = {}) {
   try {
-    if (!text) return '';
-    const endpoint = process.env.LT_ENDPOINT || DEFAULT_ENDPOINT;
-    const apiKey = process.env.LT_API_KEY || undefined;
+    if (!text || !text.trim()) return text;
 
-    // Se for pequeno, vai direto. Se for grande, por blocos.
-    const blocks = chunk(text, 4500);
-    const translated = [];
+    // lista de tentativas: 1) primário; 2...) fallbacks
+    const endpoints = [PRIMARY_ENDPOINT, ...FALLBACK_ENDPOINTS];
+
+    const blocks = chunk(text, 4000);
+    const translatedBlocks = [];
+
     for (const q of blocks) {
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          q,
-          source,
-          target,
-          format: 'text',
-          api_key: apiKey
-        })
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      translated.push(data?.translatedText || '');
+      let lastErr = null;
+      let got = '';
+
+      for (let e = 0; e < endpoints.length && !got; e++) {
+        const ep = endpoints[e];
+        // até 2 tentativas por endpoint (com backoff)
+        for (let attempt = 1; attempt <= 2 && !got; attempt++) {
+          try {
+            got = await requestLT(ep, q, { source, target, format: 'text' });
+            if (!got) throw new Error('Resposta vazia do tradutor');
+          } catch (err) {
+            lastErr = err;
+            // 1º erro no endpoint atual → pequeno backoff e tenta de novo
+            await sleep(600 * attempt);
+          }
+        }
+      }
+
+      if (!got) {
+        // Não conseguimos traduzir este bloco — preserva original (não quebra build)
+        console.warn('[translator] Falha ao traduzir bloco, mantendo original. Último erro:', lastErr?.message || lastErr);
+        translatedBlocks.push(q);
+      } else {
+        translatedBlocks.push(got);
+      }
     }
-    return translated.join('');
+
+    return translatedBlocks.join('');
   } catch (e) {
-    console.warn('Falha na tradução, usando original:', e.message);
-    return text; // fallback: devolve original
+    console.warn('[translator] Falha geral na tradução, mantendo original:', e.message);
+    return text;
   }
 }
 
-// Traduz HTML simples de parágrafos (<p>...</p>) preservando tags
+// ---------- API: translateHtmlParagraphs (<p>...</p>) ----------
 export async function translateHtmlParagraphs(html) {
   try {
-    const parts = html
-      .split(/<\/p>/i)
-      .map(x => x.trim())
-      .filter(Boolean)
-      .map(x => x.replace(/^<p[^>]*>/i, '').trim()); // conteúdo sem <p>
+    if (!html || !html.trim()) return html;
 
-    if (!parts.length) return html;
+    // Se não tiver <p>, trata tudo como texto plano
+    const hasP = /<\s*p[\s>]/i.test(html);
+    if (!hasP) {
+      const dec = htmlDecode(html);
+      const t = await translate(dec, { target: 'pt' });
+      return htmlEncode(t);
+    }
 
-    const joined = parts.join('\n\n');
-    const t = await translate(joined, { target: 'pt' });
-    const back = t.split(/\n{2,}/).map(seg => seg.trim()).filter(Boolean);
+    // Captura blocos <p>...</p> (simples e suficiente p/ nosso caso)
+    const matches = [...html.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi)];
+    if (!matches.length) {
+      const dec = htmlDecode(html);
+      const t = await translate(dec, { target: 'pt' });
+      return htmlEncode(t);
+    }
 
-    // re-empacota em <p>...</p>
-    return back.map(seg =>
-      `<p>${seg.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>`
-    ).join('\n');
-  } catch {
+    const out = [];
+    for (const m of matches) {
+      const innerRaw = m[1] || '';
+      const innerDec = htmlDecode(innerRaw);
+      const t = await translate(innerDec, { target: 'pt' });
+      out.push(`<p>${htmlEncode(t)}</p>`);
+    }
+    return out.join('\n');
+  } catch (e) {
+    console.warn('[translator] Falha ao traduzir HTML; devolvendo original:', e.message);
     return html;
   }
 }

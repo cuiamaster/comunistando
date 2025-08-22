@@ -10,7 +10,8 @@ const OUT_RSS = path.resolve('public/rss');
 const parser = new Parser({ timeout: 15000 });
 
 const SITE = {
-  baseUrl: 'https://YOUR_GITHUB_USERNAME.github.io/comunistando',
+  // Se seu usuário NÃO for "cuiamaster", troque para o seu:
+  baseUrl: 'https://cuiamaster.github.io/comunistando',
   adsClient: 'ca-pub-1234567890123456'
 };
 
@@ -21,41 +22,68 @@ function slugify(s) {
 }
 function rfc822(dateIso){ return new Date(dateIso||Date.now()).toUTCString(); }
 
-async function fromRSS(src) {
-  const feed = await parser.parseURL(src.url);
-  const item = feed.items?.[0];
-  if (!item) throw new Error('RSS vazio: ' + src.url);
-  return {
-    country: src.country,
-    title: (item.title || 'Sem título').trim(),
-    summary: (item.contentSnippet || item.content || '').replace(/\s+/g,' ').trim().slice(0,260),
-    publishedAt: item.isoDate || item.pubDate || new Date().toISOString(),
-    sourceName: (new URL(feed.link || src.url)).hostname,
-    sourceUrl: item.link || feed.link || src.url
-  };
+// Tenta capturar imagem (og:image / twitter:image) da página da matéria
+async function getOgImage(url) {
+  try {
+    const html = await fetch(url, { headers: { 'user-agent': 'Mozilla/5.0 ComunistandoBot' } }).then(r => r.text());
+    const $ = cheerio.load(html);
+    return $('meta[property="og:image"]').attr('content')
+        || $('meta[name="twitter:image"]').attr('content')
+        || '';
+  } catch {
+    return '';
+  }
 }
 
+// Agora pegamos ATÉ 3 itens do feed e tentamos imagem
+async function fromRSS(src) {
+  const feed = await parser.parseURL(src.url);
+  const items = (feed.items || []).slice(0, 3);
+  const out = [];
+  for (const item of items) {
+    const link = item.link || feed.link || src.url;
+    let image = item.enclosure?.url || '';
+    if (!image) image = await getOgImage(link);
+    out.push({
+      country: src.country,
+      title: (item.title || 'Sem título').trim(),
+      summary: (item.contentSnippet || item.content || '').replace(/\s+/g, ' ').trim().slice(0, 260),
+      publishedAt: item.isoDate || item.pubDate || new Date().toISOString(),
+      sourceName: (new URL(feed.link || src.url)).hostname,
+      sourceUrl: link,
+      imageUrl: image || ''
+    });
+  }
+  return out;
+}
+
+// Para sites sem RSS, achamos o link da primeira matéria e tentamos pegar a imagem
 async function fromScrape(src) {
   const res = await fetch(src.url, { headers: { 'user-agent': 'Mozilla/5.0 ComunistandoBot' } });
   const html = await res.text();
   const $ = cheerio.load(html);
   const linkEl = $(src.pick?.selector).first();
   const link = new URL(linkEl.attr('href') || src.url, src.url).toString();
-  const page = await fetch(link, { headers: { 'user-agent': 'Mozilla/5.0 ComunistandoBot' } }).then(r=>r.text()).catch(()=>'');
+
+  const page = await fetch(link, { headers: { 'user-agent': 'Mozilla/5.0 ComunistandoBot' } }).then(r => r.text()).catch(() => '');
   const $$ = cheerio.load(page);
   const title = $$('meta[property="og:title"]').attr('content') || $$('h1').first().text() || $('title').text();
   const desc  = $$('meta[name="description"]').attr('content') || $$('p').first().text() || '';
   const published = $$('meta[property="article:published_time"]').attr('content') || $$('time').attr('datetime') || new Date().toISOString();
-  return {
+  const image = $$('meta[property="og:image"]').attr('content') || $$('meta[name="twitter:image"]').attr('content') || '';
+
+  return [{
     country: src.country,
     title: title.trim(),
-    summary: desc.replace(/\s+/g,' ').trim().slice(0,260),
+    summary: desc.replace(/\s+/g, ' ').trim().slice(0, 260),
     publishedAt: published,
     sourceName: (new URL(link)).hostname,
-    sourceUrl: link
-  };
+    sourceUrl: link,
+    imageUrl: image || ''
+  }];
 }
 
+// Template das páginas de categoria (agora com imagem)
 function categoryTemplate({ country, slug }) {
   return `<!doctype html>
 <html lang="pt-BR">
@@ -124,9 +152,8 @@ function categoryTemplate({ country, slug }) {
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
     const COUNTRY = ${JSON.stringify(country)};
-    function escapeHtml(s=''){return s.replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));}
+    function escapeHtml(s=''){return s.replace(/[&<>\"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;','\\'':'&#39;'}[c]));}
     function formatDate(iso){try{return new Intl.DateTimeFormat('pt-BR',{dateStyle:'medium',timeStyle:'short'}).format(new Date(iso));}catch{return '';}}
-
     fetch('../../data/news.json', { cache: 'no-store' })
       .then(r => r.json())
       .then(items => items.filter(n => n.country === COUNTRY))
@@ -140,6 +167,9 @@ function categoryTemplate({ country, slug }) {
               <span class="text-xs font-semibold uppercase tracking-wide text-red-400">\${COUNTRY}</span>
               <time class="text-xs text-zinc-400">\${formatDate(n.publishedAt)}</time>
             </div>
+            \${n.imageUrl ? \`<a href="\${n.sourceUrl}" target="_blank" rel="noopener noreferrer">
+              <img src="\${n.imageUrl}" alt="" class="w-full h-48 object-cover rounded-xl mb-3 border border-zinc-700" onerror="this.remove()"/>
+            </a>\` : ``}
             <h3 class="text-xl font-bold leading-tight mb-2 text-white">\${escapeHtml(n.title)}</h3>
             <p class="text-zinc-300 mb-3">\${escapeHtml(n.summary)}</p>
             <a class="inline-flex items-center gap-2 text-red-400 hover:text-red-300 font-medium" href="\${n.sourceUrl}" target="_blank" rel="noopener noreferrer">Fonte: \${escapeHtml(n.sourceName)} →</a>\`;
@@ -213,7 +243,9 @@ async function run() {
     try { return src.type === 'rss' ? await fromRSS(src) : await fromScrape(src); }
     catch (err) { console.error('Falha em', src.country, err.message); return null; }
   });
-  const results = (await Promise.all(jobs)).filter(Boolean);
+  const fetched = (await Promise.all(jobs)).filter(Boolean);
+  const results = fetched.flat(); // achatando (RSS traz vários itens)
+
   await fs.mkdir(path.dirname(OUT_JSON), { recursive: true });
   await fs.writeFile(OUT_JSON, JSON.stringify(results, null, 2), 'utf-8');
 

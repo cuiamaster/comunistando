@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Comunistando — China</title>
+    <link>https://YOUR_GITHUB_USERNAME.github.io/comunistando/categoria/china/</link>
+    <description>Breaking News — China</description>
+    <language>pt-BR</language>
+
+    <item>
+      <title><![CDATA[]]></title>
+      <link>https://news.cgtn.com/news/</link>
+      <description><![CDATA[]]></description>
+      <pubDate>Fri, 22 Aug 2025 18:12:13 GMT</pubDate>
+      <source url="https://news.cgtn.com/news/">news.cgtn.com</source>
+    </item>
+  </channel>
+</rss>

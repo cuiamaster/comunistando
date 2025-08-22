@@ -1,10 +1,22 @@
 export default [
-  { country: 'China', type: 'scrape', url: 'https://news.cgtn.com/news/', pick: { selector: 'a[href*="2025-"], a[href*="/p.html"]' } },
-  { country: 'Rússia', type: 'rss',   url: 'https://www.themoscowtimes.com/rss/news' },
-  { country: 'Índia (análises Sul-Sul)', type: 'rss', url: 'https://www.newsclick.in/rss.xml' },
-  { country: 'Cuba', type: 'rss', url: 'https://en.granma.cu/rss' },
-  { country: 'Vietnã', type: 'rss', url: 'https://vnanet.vn/en/rss' },
-  { country: 'Coreia do Norte', type: 'scrape', url: 'https://www.rodong.rep.kp/en/', pick: { selector: 'a[href*="index.php"], a[href*="/en/"]' } },
-  { country: 'Laos', type: 'scrape', url: 'https://kpl.gov.la/En/', pick: { selector: 'a[href*="detail.aspx"]' } },
-  { country: 'Venezuela', type: 'rss', url: 'https://avn.info.ve/feed/' }
+  // CHINA — RSS estável do China Daily (se quiser, depois somamos Xinhua/CGTN)
+  { country: 'China', type: 'rss', url: 'http://www.chinadaily.com.cn/rss/china_rss.xml' },
+
+  // RÚSSIA — The Moscow Times (funcionou no seu JSON)
+  { country: 'Rússia', type: 'rss', url: 'https://www.themoscowtimes.com/rss/news' },
+
+  // ÍNDIA — NewsClick (RSS estável)
+  { country: 'Índia (análises Sul-Sul)', type: 'rss', url: 'https://www.newsclick.in/rss-feed' },
+
+  // LAOS — KPL (home com links diretos; mantemos por enquanto)
+  { country: 'Laos', type: 'scrape', url: 'https://kpl.gov.la/EN/', pick: { selector: 'a[href*="detail.aspx"]' } }
+
+  // CUBA
+  { country: 'Cuba', type: 'rss', url: 'https://www.prensa-latina.cu/feed' },
+
+  // VIETNÃ
+  { country: 'Vietnã', type: 'rss', url: 'https://en.nhandan.vn/rss/home' },
+
+  // VENEZUELA
+  { country: 'Venezuela', type: 'rss', url: 'https://www.telesurenglish.net/rss/RssHomepage' },
 ];

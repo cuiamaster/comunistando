@@ -49,7 +49,7 @@ const parser = new Parser({ timeout: 15000 });
 const SITE = {
   baseUrl: 'https://cuiamaster.github.io/comunistando', // troque se seu usuário não for cuiamaster
   adsClient: 'ca-pub-1234567890123456', // placeholder
-  imgProxy: true // << ative/desative o proxy de imagens
+  imgProxy: true // << Passo 3: ativa proxy de imagens
 };
 
 // ===================== Utilidades =====================
@@ -132,7 +132,7 @@ async function fromRSS(src) {
     } else {
       image = await getOgImage(link); // já tenta fallback
     }
-    if (image) image = withImageProxy(image); // aplica proxy (se ativo)
+    if (image) image = withImageProxy(image); // Passo 3: aplica proxy (se ativo)
 
     const summary = (item.contentSnippet || item.content || '')
       .replace(/\s+/g, ' ')
@@ -210,7 +210,7 @@ async function fromScrape(src) {
     image = toAbsoluteUrl(image, link);
     image = preferHttps(image);
     image = encodeURI(image);
-    image = withImageProxy(image); // aplica proxy (se ativo)
+    image = withImageProxy(image); // Passo 3: aplica proxy (se ativo)
   }
 
   if (!title) return [];

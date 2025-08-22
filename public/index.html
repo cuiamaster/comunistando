@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Comunistando — Breaking News do mundo socialista</title>
+  <meta name="description" content="Comunistando traz, todos os dias, as principais notícias dos países socialistas e aliados — em português do Brasil, com fontes citadas." />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456" crossorigin="anonymous"></script>
+</head>
+<body class="bg-gradient-to-br from-red-900 via-zinc-900 to-black text-zinc-100 font-sans">
+  <header class="bg-gradient-to-r from-red-800 via-red-700 to-red-600 text-white shadow-xl">
+    <div class="max-w-6xl mx-auto px-4 py-6">
+      <div class="flex items-center justify-between">
+        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">🟥 Comunistando</h1>
+        <span class="text-white/90 text-sm" id="today"></span>
+      </div>
+      <p class="text-white/90 max-w-3xl mt-2">Breaking News dos países socialistas e comunistas — em português do Brasil, com links e fontes oficiais.</p>
+      <nav class="mt-4 text-sm flex flex-wrap gap-3 text-white/90">
+        <a href="categoria/china/">China</a>
+        <a href="categoria/russia/">Rússia</a>
+        <a href="categoria/india-analises-sul-sul/">Índia</a>
+        <a href="categoria/cuba/">Cuba</a>
+        <a href="categoria/vietna/">Vietnã</a>
+        <a href="categoria/coreia-do-norte/">Coreia do Norte</a>
+        <a href="categoria/laos/">Laos</a>
+        <a href="categoria/venezuela/">Venezuela</a>
+      </nav>
+      <div class="w-full mt-4">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1234567890123456" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <section class="lg:col-span-8 flex flex-col gap-6" id="news-list"></section>
+    <aside class="lg:col-span-4">
+      <div class="sticky top-6 flex flex-col gap-6">
+        <div class="bg-zinc-800 border border-zinc-700 shadow-lg rounded-2xl p-5">
+          <h2 class="font-semibold mb-2 text-red-400">Anúncios</h2>
+          <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1234567890123456" data-ad-slot="0987654321" data-ad-format="auto" data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="border-t border-zinc-800 bg-zinc-900">
+    <div class="max-w-6xl mx-auto px-4 py-6 text-sm text-zinc-400 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+      <span>© <span id="year"></span> Comunistando. Desenvolvido com ❤️ no Brasil.</span>
+      <span>Fontes sempre citadas ao final de cada notícia.</span>
+    </div>
+  </footer>
+
+  <script>
+    const D = new Date();
+    document.getElementById('today').textContent = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'full' }).format(D);
+    document.getElementById('year').textContent = D.getFullYear();
+
+    function escapeHtml(s=''){return s.replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));}
+    function formatDate(iso){try{return new Intl.DateTimeFormat('pt-BR',{dateStyle:'medium',timeStyle:'short'}).format(new Date(iso));}catch{return '';}}
+
+    async function loadNews(){
+      try{
+        const r = await fetch('data/news.json', { cache: 'no-store' });
+        const items = await r.json();
+        renderNews(items);
+      }catch(e){}
+    }
+
+    function renderNews(items){
+      const host = document.getElementById('news-list');
+      host.innerHTML='';
+      items.forEach((n)=>{
+        const card = document.createElement('article');
+        card.className='bg-zinc-800 border border-zinc-700 shadow-lg rounded-2xl p-5 hover:border-red-600 transition-colors';
+        card.innerHTML=`
+          <div class="flex items-center justify-between gap-3 mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wide text-red-400">${n.country}</span>
+            <time class="text-xs text-zinc-400">${formatDate(n.publishedAt)}</time>
+          </div>
+          <h3 class="text-xl font-bold leading-tight mb-2 text-white">${escapeHtml(n.title)}</h3>
+          <p class="text-zinc-300 mb-3">${escapeHtml(n.summary)}</p>
+          <a class="inline-flex items-center gap-2 text-red-400 hover:text-red-300 font-medium" href="${n.sourceUrl}" target="_blank" rel="noopener noreferrer">Fonte: ${escapeHtml(n.sourceName)} →</a>
+        `;
+        host.appendChild(card);
+      });
+      const ad = document.createElement('div');
+      ad.innerHTML = `
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1234567890123456" data-ad-slot="2468135790" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      `;
+      host.insertBefore(ad, host.children[2] || null);
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    }
+    loadNews();
+  </script>
+</body>
+</html>

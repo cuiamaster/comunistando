@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Coreia do Norte — Comunistando</title>
+  <meta name="description" content="Últimas manchetes de Coreia do Norte no Comunistando." />
+  <link rel="icon" href="../../favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="../../styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456" crossorigin="anonymous"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://YOUR_GITHUB_USERNAME.github.io/comunistando/"},
+      {"@type":"ListItem","position":2,"name":"Coreia do Norte","item":"https://YOUR_GITHUB_USERNAME.github.io/comunistando/categoria/coreia-do-norte/"}
+    ]
+  }
+  </script>
+</head>
+<body class="bg-gradient-to-br from-red-900 via-zinc-900 to-black text-zinc-100 font-sans">
+  <header class="bg-gradient-to-r from-red-800 via-red-700 to-red-600 text-white shadow-xl">
+    <div class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
+      <a href="../../" class="text-2xl font-extrabold">🟥 Comunistando</a>
+      <nav class="text-sm flex gap-3 text-white/90">
+        <a href="../china/">China</a>
+        <a href="../russia/">Rússia</a>
+        <a href="../india-analises-sul-sul/">Índia</a>
+        <a href="../cuba/">Cuba</a>
+        <a href="../vietna/">Vietnã</a>
+        <a href="../coreia-do-norte/">Coreia do Norte</a>
+        <a href="../laos/">Laos</a>
+        <a href="../venezuela/">Venezuela</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <section class="lg:col-span-8 flex flex-col gap-6" id="news-list">
+      <nav class="text-xs text-zinc-300 mb-2">
+        <a class="underline" href="../../">Home</a> <span>›</span> <span>Coreia do Norte</span>
+      </nav>
+      <h1 class="text-3xl font-bold">Coreia do Norte</h1>
+    </section>
+    <aside class="lg:col-span-4">
+      <div class="sticky top-6 flex flex-col gap-6">
+        <div class="bg-zinc-800 border border-zinc-700 shadow-lg rounded-2xl p-5">
+          <h2 class="font-semibold mb-2 text-red-400">Anúncios</h2>
+          <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1234567890123456" data-ad-slot="0987654321" data-ad-format="auto" data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="border-t border-zinc-800 bg-zinc-900">
+    <div class="max-w-6xl mx-auto px-4 py-6 text-sm text-zinc-400 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+      <span>© <span id="year"></span> Comunistando.</span>
+      <a class="underline" href="../../">Voltar para a Home</a>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const COUNTRY = "Coreia do Norte";
+    function escapeHtml(s=''){return s.replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));}
+    function formatDate(iso){try{return new Intl.DateTimeFormat('pt-BR',{dateStyle:'medium',timeStyle:'short'}).format(new Date(iso));}catch{return '';}}
+
+    fetch('../../data/news.json', { cache: 'no-store' })
+      .then(r => r.json())
+      .then(items => items.filter(n => n.country === COUNTRY))
+      .then(items => {
+        const host = document.getElementById('news-list');
+        items.forEach(n => {
+          const card = document.createElement('article');
+          card.className = 'bg-zinc-800 border border-zinc-700 shadow-lg rounded-2xl p-5 hover:border-red-600 transition-colors';
+          card.innerHTML = `
+            <div class="flex items-center justify-between gap-3 mb-2">
+              <span class="text-xs font-semibold uppercase tracking-wide text-red-400">Coreia do Norte</span>
+              <time class="text-xs text-zinc-400">${formatDate(n.publishedAt)}</time>
+            </div>
+            <h3 class="text-xl font-bold leading-tight mb-2 text-white">${escapeHtml(n.title)}</h3>
+            <p class="text-zinc-300 mb-3">${escapeHtml(n.summary)}</p>
+            <a class="inline-flex items-center gap-2 text-red-400 hover:text-red-300 font-medium" href="${n.sourceUrl}" target="_blank" rel="noopener noreferrer">Fonte: ${escapeHtml(n.sourceName)} →</a>
+          `;
+          host.appendChild(card);
+        });
+      })
+      .catch(() => {});
+  </script>
+</body>
+</html>

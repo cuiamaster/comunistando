@@ -1,0 +1,15 @@
+{
+  "name": "comunistando",
+  "version": "1.2.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/aggregator.mjs",
+    "dev": "npm run build && npx http-server public -p 5173 -o",
+    "postbuild": "echo build ok"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "rss-parser": "^3.13.0"
+  }
+}

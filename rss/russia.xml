@@ -2,7 +2,7 @@
 <rss version="2.0">
   <channel>
     <title>Comunistando — Rússia</title>
-    <link>https://YOUR_GITHUB_USERNAME.github.io/comunistando/categoria/russia/</link>
+    <link>https://cuiamaster.github.io/comunistando/categoria/russia/</link>
     <description>Breaking News — Rússia</description>
     <language>pt-BR</language>
 
@@ -12,6 +12,22 @@
       <description><![CDATA[Rosprirodnadzor is seeking $614 million in damages from the two companies over the December 2024 oil spill off the coast of the Krasnodar region.]]></description>
       <pubDate>Fri, 22 Aug 2025 14:56:17 GMT</pubDate>
       <source url="https://www.themoscowtimes.com/2025/08/22/krasnodar-court-freezes-bank-accounts-of-companies-linked-to-black-sea-oil-spill-a90331">www.themoscowtimes.com</source>
+    </item>
+
+    <item>
+      <title><![CDATA[Russia Delays Moon and Venus Missions Again]]></title>
+      <link>https://www.themoscowtimes.com/2025/08/22/russia-delays-moon-and-venus-missions-again-a90328</link>
+      <description><![CDATA[Luna-26 is planned to launch in 2028, while the Venus mission, previously rescheduled for the 2034-35 window, will now slip to 2036.]]></description>
+      <pubDate>Fri, 22 Aug 2025 14:19:04 GMT</pubDate>
+      <source url="https://www.themoscowtimes.com/2025/08/22/russia-delays-moon-and-venus-missions-again-a90328">www.themoscowtimes.com</source>
+    </item>
+
+    <item>
+      <title><![CDATA[Lavrov Says ‘No Meeting Planned’ Between Putin and Zelensky]]></title>
+      <link>https://www.themoscowtimes.com/2025/08/22/lavrov-says-no-meeting-planned-between-putin-and-zelensky-a90330</link>
+      <description><![CDATA[The foreign minister’s remarks on Meet the Press were the latest and clearest indication that a Putin-Zelensky summit is nowhere on the horizon.]]></description>
+      <pubDate>Fri, 22 Aug 2025 13:33:00 GMT</pubDate>
+      <source url="https://www.themoscowtimes.com/2025/08/22/lavrov-says-no-meeting-planned-between-putin-and-zelensky-a90330">www.themoscowtimes.com</source>
     </item>
   </channel>
 </rss>

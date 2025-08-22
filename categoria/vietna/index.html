@@ -65,7 +65,7 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
     const COUNTRY = "Vietnã";
-    function escapeHtml(s=''){return s.replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',''':'&#39;'}[c]));}
+    function escapeHtml(s=''){return s.replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));}
     function formatDate(iso){try{return new Intl.DateTimeFormat('pt-BR',{dateStyle:'medium',timeStyle:'short'}).format(new Date(iso));}catch{return '';}}
 
     fetch('../../data/news.json', { cache: 'no-store' })
@@ -78,12 +78,13 @@
           card.className = 'bg-zinc-800 border border-zinc-700 shadow-lg rounded-2xl p-5 hover:border-red-600 transition-colors';
           card.innerHTML = `
             <div class="flex items-center justify-between gap-3 mb-2">
-              <span class="text-xs font-semibold uppercase tracking-wide text-red-400">${COUNTRY}</span>
+              <span class="text-xs font-semibold uppercase tracking-wide text-red-400">Vietnã</span>
               <time class="text-xs text-zinc-400">${formatDate(n.publishedAt)}</time>
             </div>
             <h3 class="text-xl font-bold leading-tight mb-2 text-white">${escapeHtml(n.title)}</h3>
             <p class="text-zinc-300 mb-3">${escapeHtml(n.summary)}</p>
-            <a class="inline-flex items-center gap-2 text-red-400 hover:text-red-300 font-medium" href="${n.sourceUrl}" target="_blank" rel="noopener noreferrer">Fonte: ${escapeHtml(n.sourceName)} →</a>`;
+            <a class="inline-flex items-center gap-2 text-red-400 hover:text-red-300 font-medium" href="${n.sourceUrl}" target="_blank" rel="noopener noreferrer">Fonte: ${escapeHtml(n.sourceName)} →</a>
+          `;
           host.appendChild(card);
         });
       })

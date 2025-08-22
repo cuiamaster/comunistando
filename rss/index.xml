@@ -2,7 +2,7 @@
 <rss version="2.0">
   <channel>
     <title>Comunistando — Feed Geral</title>
-    <link>https://YOUR_GITHUB_USERNAME.github.io/comunistando/</link>
+    <link>https://cuiamaster.github.io/comunistando/</link>
     <description>Breaking News do mundo socialista (feed geral)</description>
     <language>pt-BR</language>
 
@@ -10,7 +10,7 @@
       <title><![CDATA[]]></title>
       <link>https://news.cgtn.com/news/</link>
       <description><![CDATA[]]></description>
-      <pubDate>Fri, 22 Aug 2025 18:12:13 GMT</pubDate>
+      <pubDate>Fri, 22 Aug 2025 18:40:14 GMT</pubDate>
       <source url="https://news.cgtn.com/news/">news.cgtn.com</source>
     </item>
 
@@ -23,6 +23,22 @@
     </item>
 
     <item>
+      <title><![CDATA[Russia Delays Moon and Venus Missions Again]]></title>
+      <link>https://www.themoscowtimes.com/2025/08/22/russia-delays-moon-and-venus-missions-again-a90328</link>
+      <description><![CDATA[Luna-26 is planned to launch in 2028, while the Venus mission, previously rescheduled for the 2034-35 window, will now slip to 2036.]]></description>
+      <pubDate>Fri, 22 Aug 2025 14:19:04 GMT</pubDate>
+      <source url="https://www.themoscowtimes.com/2025/08/22/russia-delays-moon-and-venus-missions-again-a90328">www.themoscowtimes.com</source>
+    </item>
+
+    <item>
+      <title><![CDATA[Lavrov Says ‘No Meeting Planned’ Between Putin and Zelensky]]></title>
+      <link>https://www.themoscowtimes.com/2025/08/22/lavrov-says-no-meeting-planned-between-putin-and-zelensky-a90330</link>
+      <description><![CDATA[The foreign minister’s remarks on Meet the Press were the latest and clearest indication that a Putin-Zelensky summit is nowhere on the horizon.]]></description>
+      <pubDate>Fri, 22 Aug 2025 13:33:00 GMT</pubDate>
+      <source url="https://www.themoscowtimes.com/2025/08/22/lavrov-says-no-meeting-planned-between-putin-and-zelensky-a90330">www.themoscowtimes.com</source>
+    </item>
+
+    <item>
       <title><![CDATA[Final Round of Gaza's Destruction Has Begun!]]></title>
       <link>https://www.newsclick.in/final-round-gazas-destruction-has-begun</link>
       <description><![CDATA[In this episode of ‘Padtaal Duniya Bhar Ki’ Newsclick's Prabir Purkayastha speaks on the involvement of Western countries in Israel's bloody plans.]]></description>
@@ -31,10 +47,26 @@
     </item>
 
     <item>
+      <title><![CDATA[Delhi: Stop Razing Slums, Provide Decent Houses!]]></title>
+      <link>https://www.newsclick.in/delhi-stop-razing-slums-provide-decent-houses</link>
+      <description><![CDATA[A Convention of Left parties on housing rights reminded the government of its promise of ‘Jahan Jhuggi, Wahin Makaan’.]]></description>
+      <pubDate>Tue, 19 Aug 2025 07:11:22 GMT</pubDate>
+      <source url="https://www.newsclick.in/delhi-stop-razing-slums-provide-decent-houses">www.newsclick.in</source>
+    </item>
+
+    <item>
+      <title><![CDATA[Himalayan Disasters: Natural or Man-Made?]]></title>
+      <link>https://www.newsclick.in/himalayan-disasters-natural-or-man-made</link>
+      <description><![CDATA[Why are disasters continuously increasing from Uttarakhand, Himachal to Kishtwar? An interview with noted geologist S P Sati.]]></description>
+      <pubDate>Mon, 18 Aug 2025 06:45:14 GMT</pubDate>
+      <source url="https://www.newsclick.in/himalayan-disasters-natural-or-man-made">www.newsclick.in</source>
+    </item>
+
+    <item>
       <title><![CDATA[Lao Foreign Minister Pays Courtesy Call on Mongolian Prime Minister]]></title>
       <link>https://kpl.gov.la/En/detail.aspx?id=94278</link>
       <description><![CDATA[]]></description>
-      <pubDate>Fri, 22 Aug 2025 18:12:15 GMT</pubDate>
+      <pubDate>Fri, 22 Aug 2025 18:40:15 GMT</pubDate>
       <source url="https://kpl.gov.la/En/detail.aspx?id=94278">kpl.gov.la</source>
     </item>
   </channel>

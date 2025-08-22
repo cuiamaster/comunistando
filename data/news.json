@@ -3,9 +3,10 @@
     "country": "China",
     "title": "",
     "summary": "",
-    "publishedAt": "2025-08-22T18:12:13.775Z",
+    "publishedAt": "2025-08-22T18:40:14.221Z",
     "sourceName": "news.cgtn.com",
-    "sourceUrl": "https://news.cgtn.com/news/"
+    "sourceUrl": "https://news.cgtn.com/news/",
+    "imageUrl": ""
   },
   {
     "country": "Rússia",
@@ -13,7 +14,26 @@
     "summary": "Rosprirodnadzor is seeking $614 million in damages from the two companies over the December 2024 oil spill off the coast of the Krasnodar region.",
     "publishedAt": "2025-08-22T14:56:17.000Z",
     "sourceName": "www.themoscowtimes.com",
-    "sourceUrl": "https://www.themoscowtimes.com/2025/08/22/krasnodar-court-freezes-bank-accounts-of-companies-linked-to-black-sea-oil-spill-a90331"
+    "sourceUrl": "https://www.themoscowtimes.com/2025/08/22/krasnodar-court-freezes-bank-accounts-of-companies-linked-to-black-sea-oil-spill-a90331",
+    "imageUrl": "https://static.themoscowtimes.com/image/og/be/90331__be59bc2e4c23f63b1aded25464e523a4.jpg"
+  },
+  {
+    "country": "Rússia",
+    "title": "Russia Delays Moon and Venus Missions Again",
+    "summary": "Luna-26 is planned to launch in 2028, while the Venus mission, previously rescheduled for the 2034-35 window, will now slip to 2036.",
+    "publishedAt": "2025-08-22T14:19:04.000Z",
+    "sourceName": "www.themoscowtimes.com",
+    "sourceUrl": "https://www.themoscowtimes.com/2025/08/22/russia-delays-moon-and-venus-missions-again-a90328",
+    "imageUrl": "https://static.themoscowtimes.com/image/og/67/90328__6746a632ae59b896d200554bee86b952.jpg"
+  },
+  {
+    "country": "Rússia",
+    "title": "Lavrov Says ‘No Meeting Planned’ Between Putin and Zelensky",
+    "summary": "The foreign minister’s remarks on Meet the Press were the latest and clearest indication that a Putin-Zelensky summit is nowhere on the horizon.",
+    "publishedAt": "2025-08-22T13:33:00.000Z",
+    "sourceName": "www.themoscowtimes.com",
+    "sourceUrl": "https://www.themoscowtimes.com/2025/08/22/lavrov-says-no-meeting-planned-between-putin-and-zelensky-a90330",
+    "imageUrl": "https://static.themoscowtimes.com/image/og/d2/90330__d2ee018dd6d6c1bb81f11b68753889b7.jpg"
   },
   {
     "country": "Índia (análises Sul-Sul)",
@@ -21,14 +41,34 @@
     "summary": "In this episode of ‘Padtaal Duniya Bhar Ki’ Newsclick's Prabir Purkayastha speaks on the involvement of Western countries in Israel's bloody plans.",
     "publishedAt": "2025-08-22T06:46:46.000Z",
     "sourceName": "www.newsclick.in",
-    "sourceUrl": "https://www.newsclick.in/final-round-gazas-destruction-has-begun"
+    "sourceUrl": "https://www.newsclick.in/final-round-gazas-destruction-has-begun",
+    "imageUrl": "https://www.newsclick.in/sites/default/files/2025-08/gaza%20%283%29.jpg"
+  },
+  {
+    "country": "Índia (análises Sul-Sul)",
+    "title": "Delhi: Stop Razing Slums, Provide Decent Houses!",
+    "summary": "A Convention of Left parties on housing rights reminded the government of its promise of ‘Jahan Jhuggi, Wahin Makaan’.",
+    "publishedAt": "2025-08-19T07:11:22.000Z",
+    "sourceName": "www.newsclick.in",
+    "sourceUrl": "https://www.newsclick.in/delhi-stop-razing-slums-provide-decent-houses",
+    "imageUrl": "https://www.newsclick.in/sites/default/files/2025-08/1000036643%20%281%29.jpg"
+  },
+  {
+    "country": "Índia (análises Sul-Sul)",
+    "title": "Himalayan Disasters: Natural or Man-Made?",
+    "summary": "Why are disasters continuously increasing from Uttarakhand, Himachal to Kishtwar? An interview with noted geologist S P Sati.",
+    "publishedAt": "2025-08-18T06:45:14.000Z",
+    "sourceName": "www.newsclick.in",
+    "sourceUrl": "https://www.newsclick.in/himalayan-disasters-natural-or-man-made",
+    "imageUrl": "https://www.newsclick.in/sites/default/files/2025-08/1000036437.jpg"
   },
   {
     "country": "Laos",
     "title": "Lao Foreign Minister Pays Courtesy Call on Mongolian Prime Minister",
     "summary": "",
-    "publishedAt": "2025-08-22T18:12:15.534Z",
+    "publishedAt": "2025-08-22T18:40:15.103Z",
     "sourceName": "kpl.gov.la",
-    "sourceUrl": "https://kpl.gov.la/En/detail.aspx?id=94278"
+    "sourceUrl": "https://kpl.gov.la/En/detail.aspx?id=94278",
+    "imageUrl": "https://kpl.gov.la/Media/Upload/News/Hot/2025/08/22/2 FM meet.jpg"
   }
 ]

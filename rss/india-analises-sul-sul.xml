@@ -2,7 +2,7 @@
 <rss version="2.0">
   <channel>
     <title>Comunistando — Índia (análises Sul-Sul)</title>
-    <link>https://YOUR_GITHUB_USERNAME.github.io/comunistando/categoria/india-analises-sul-sul/</link>
+    <link>https://cuiamaster.github.io/comunistando/categoria/india-analises-sul-sul/</link>
     <description>Breaking News — Índia (análises Sul-Sul)</description>
     <language>pt-BR</language>
 
@@ -12,6 +12,22 @@
       <description><![CDATA[In this episode of ‘Padtaal Duniya Bhar Ki’ Newsclick's Prabir Purkayastha speaks on the involvement of Western countries in Israel's bloody plans.]]></description>
       <pubDate>Fri, 22 Aug 2025 06:46:46 GMT</pubDate>
       <source url="https://www.newsclick.in/final-round-gazas-destruction-has-begun">www.newsclick.in</source>
+    </item>
+
+    <item>
+      <title><![CDATA[Delhi: Stop Razing Slums, Provide Decent Houses!]]></title>
+      <link>https://www.newsclick.in/delhi-stop-razing-slums-provide-decent-houses</link>
+      <description><![CDATA[A Convention of Left parties on housing rights reminded the government of its promise of ‘Jahan Jhuggi, Wahin Makaan’.]]></description>
+      <pubDate>Tue, 19 Aug 2025 07:11:22 GMT</pubDate>
+      <source url="https://www.newsclick.in/delhi-stop-razing-slums-provide-decent-houses">www.newsclick.in</source>
+    </item>
+
+    <item>
+      <title><![CDATA[Himalayan Disasters: Natural or Man-Made?]]></title>
+      <link>https://www.newsclick.in/himalayan-disasters-natural-or-man-made</link>
+      <description><![CDATA[Why are disasters continuously increasing from Uttarakhand, Himachal to Kishtwar? An interview with noted geologist S P Sati.]]></description>
+      <pubDate>Mon, 18 Aug 2025 06:45:14 GMT</pubDate>
+      <source url="https://www.newsclick.in/himalayan-disasters-natural-or-man-made">www.newsclick.in</source>
     </item>
   </channel>
 </rss>

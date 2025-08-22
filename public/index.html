@@ -75,22 +75,39 @@
       const host = document.getElementById('news-list');
       host.innerHTML='';
       items.forEach((n)=>{
+        // Se houver permalink, usamos a página interna; senão, caímos no link da fonte
+        const url = n.permalink ? ('.' + n.permalink) : n.sourceUrl;
+
         const card = document.createElement('article');
         card.className='bg-zinc-800 border border-zinc-700 shadow-lg rounded-2xl p-5 hover:border-red-600 transition-colors';
         card.innerHTML=`
           <div class="flex items-center justify-between gap-3 mb-2">
-    <span class="text-xs font-semibold uppercase tracking-wide text-red-400">${n.country}</span>
-    <time class="text-xs text-zinc-400">${formatDate(n.publishedAt)}</time>
-  </div>
-  ${n.imageUrl ? `<a href="${n.sourceUrl}" target="_blank" rel="noopener noreferrer">
-      <img src="${n.imageUrl}" alt="" class="w-full h-48 object-cover rounded-xl mb-3 border border-zinc-700" onerror="this.remove()"/>
-    </a>` : ``}
-  <h3 class="text-xl font-bold leading-tight mb-2 text-white">${escapeHtml(n.title)}</h3>
-  <p class="text-zinc-300 mb-3">${escapeHtml(n.summary)}</p>
-  <a class="inline-flex items-center gap-2 text-red-400 hover:text-red-300 font-medium" href="${n.sourceUrl}" target="_blank" rel="noopener noreferrer">Fonte: ${escapeHtml(n.sourceName)} →</a>
+            <span class="text-xs font-semibold uppercase tracking-wide text-red-400">${n.country}</span>
+            <time class="text-xs text-zinc-400">${formatDate(n.publishedAt)}</time>
+          </div>
+
+          ${n.imageUrl ? `<a href="${url}">
+              <img src="${n.imageUrl}" alt="" class="w-full h-48 object-cover rounded-xl mb-3 border border-zinc-700" onerror="this.remove()"/>
+            </a>` : ``}
+
+          <h3 class="text-xl font-bold leading-tight mb-2 text-white">
+            <a href="${url}" class="hover:underline">${escapeHtml(n.title)}</a>
+          </h3>
+
+          <p class="text-zinc-300 mb-3">${escapeHtml(n.summary)}</p>
+
+          <div class="flex items-center justify-between">
+            <a class="inline-flex items-center gap-2 text-red-400 hover:text-red-300 font-medium" href="${url}">
+              Ler no Comunistando →
+            </a>
+            <a class="inline-flex items-center gap-2 text-zinc-400 hover:text-zinc-200 text-sm" href="${n.sourceUrl}" target="_blank" rel="noopener noreferrer">
+              Fonte: ${escapeHtml(n.sourceName)} ↗
+            </a>
+          </div>
         `;
         host.appendChild(card);
       });
+
       const ad = document.createElement('div');
       ad.innerHTML = `
         <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1234567890123456" data-ad-slot="2468135790" data-ad-format="auto" data-full-width-responsive="true"></ins>

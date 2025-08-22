@@ -1,3 +1,8 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import Parser from 'rss-parser';
+import * as cheerio from 'cheerio';
+import sources from './sources.js'; // << ESSA LINHA É OBRIGATÓRIA
 async function run() {
   // 1) Executa todas as fontes (RSS ou scrape)
   const jobs = sources.map(async (src) => {

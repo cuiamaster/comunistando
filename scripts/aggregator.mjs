@@ -288,28 +288,49 @@ function renderArticleHTML({ item, bodyHtml }) {
   <meta property="og:type" content="article" />
   <meta property="og:url" content="${canonical}" />
   ${item.imageUrl ? `<meta property="og:image" content="${item.imageUrl}" />` : ''}
+
+  <!-- Tailwind para aplicar o layout -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Seu CSS opcional -->
   <link rel="stylesheet" href="../styles.css" />
 </head>
-<body class="min-h-screen bg-zinc-950 text-zinc-100">
-  <header class="max-w-5xl mx-auto px-4 py-6">
-    <a href="../index.html" class="text-xl font-extrabold">Comunistando</a>
+<body class="min-h-screen bg-gradient-to-br from-red-900 via-zinc-900 to-black text-zinc-100 font-sans">
+  <header class="bg-gradient-to-r from-red-800 via-red-700 to-red-600 text-white shadow-xl">
+    <div class="max-w-6xl mx-auto px-4 py-6">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="text-3xl md:text-4xl font-extrabold tracking-tight">🟥 Comunistando</a>
+        <span class="text-white/90 text-sm">${new Intl.DateTimeFormat('pt-BR', { dateStyle: 'full' }).format(new Date())}</span>
+      </div>
+      <p class="text-white/90 max-w-3xl mt-2">Breaking News dos países socialistas e comunistas — em português do Brasil, com links e fontes oficiais.</p>
+      <nav class="mt-4 text-sm flex flex-wrap gap-3 text-white/90">
+        <a href="../categoria/china/">China</a>
+        <a href="../categoria/russia/">Rússia</a>
+        <a href="../categoria/india-analises-sul-sul/">Índia</a>
+        <a href="../categoria/cuba/">Cuba</a>
+        <a href="../categoria/vietna/">Vietnã</a>
+        <a href="../categoria/coreia-do-norte/">Coreia do Norte</a>
+        <a href="../categoria/laos/">Laos</a>
+        <a href="../categoria/venezuela/">Venezuela</a>
+      </nav>
+    </div>
   </header>
 
-  <main class="max-w-3xl mx-auto px-4 pb-16">
-    <nav class="text-sm text-zinc-400 mb-3">
+  <main class="max-w-6xl mx-auto px-4 py-10">
+    <nav class="text-sm text-zinc-400 mb-4">
       <a href="../index.html" class="hover:underline">Início</a> ·
-      <a href="../categoria/${slugify(item.country)}/index.html" class="hover:underline">${item.country}</a>
+      <a href="../categoria/${slugify(item.country)}/" class="hover:underline">${item.country}</a>
     </nav>
 
     <article class="bg-zinc-900 border border-zinc-800 rounded-2xl shadow-lg overflow-hidden">
       ${item.imageUrl ? `<img src="${item.imageUrl}" alt="" class="w-full aspect-video object-cover">` : ''}
-      <div class="p-6">
+      <div class="p-6 md:p-8">
         <h1 class="text-2xl md:text-3xl font-extrabold mb-2">${item.title}</h1>
-        <div class="text-sm text-zinc-400 mb-4">
+        <div class="text-sm text-zinc-400 mb-5">
           ${item.country} · <time datetime="${item.publishedAt}">${pubDate}</time>
         </div>
 
-        <p class="text-zinc-200 mb-4">${item.summary || ''}</p>
+        <p class="text-zinc-200 mb-5">${item.summary || ''}</p>
 
         <div class="prose prose-invert max-w-none">
           ${bodyHtml}
@@ -320,7 +341,7 @@ function renderArticleHTML({ item, bodyHtml }) {
           <div class="text-xs text-zinc-400 mt-1">Trechos exibidos para fins de informação e citação, com link para a matéria original.</div>
         </div>
 
-        <div class="mt-6 flex gap-3">
+        <div class="mt-6 flex flex-wrap gap-3">
           <a class="px-3 py-2 rounded-lg bg-zinc-100 text-zinc-900 font-medium"
              href="https://wa.me/?text=${encodeURIComponent(item.title + ' ' + canonical)}" target="_blank" rel="noopener">Compartilhar no WhatsApp</a>
           <a class="px-3 py-2 rounded-lg bg-zinc-100 text-zinc-900 font-medium"
@@ -330,8 +351,10 @@ function renderArticleHTML({ item, bodyHtml }) {
     </article>
   </main>
 
-  <footer class="max-w-5xl mx-auto px-4 py-10 text-sm text-zinc-400">
-    © ${new Date().getFullYear()} Comunistando.
+  <footer class="border-t border-zinc-800 bg-zinc-900">
+    <div class="max-w-6xl mx-auto px-4 py-6 text-sm text-zinc-400">
+      © ${new Date().getFullYear()} Comunistando.
+    </div>
   </footer>
 </body>
 </html>`;

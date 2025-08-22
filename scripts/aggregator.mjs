@@ -8,6 +8,7 @@ import path from 'node:path';
 import Parser from 'rss-parser';
 import * as cheerio from 'cheerio';
 import sources from './sources.js'; // << NÃO REMOVER
+import { translate, translateHtmlParagraphs } from './translator.mjs'; // << PASSO 2.1 (import tradutor)
 
 // ===================== Helpers de URL/HTTPS =====================
 function toAbsoluteUrl(possibleUrl, baseUrl) {
@@ -135,10 +136,14 @@ async function fromRSS(src) {
       .trim()
       .slice(0, 260);
 
+    // ===== PASSO 2.2 — traduz título e resumo =====
+    const titlePT = await translate(title, { target: 'pt' });
+    const summaryPT = await translate(summary, { target: 'pt' });
+
     out.push({
       country: src.country,
-      title,
-      summary,
+      title: titlePT,
+      summary: summaryPT,
       publishedAt: item.isoDate || item.pubDate || new Date().toISOString(),
       sourceName: (new URL(feed.link || src.url)).hostname,
       sourceUrl: link,
@@ -211,10 +216,14 @@ async function fromScrape(src) {
 
   if (!title) return [];
 
+  // ===== PASSO 2.3 — traduz título e resumo =====
+  const titlePT = await translate(title, { target: 'pt' });
+  const descPT  = await translate(desc,   { target: 'pt' });
+
   return [{
     country: src.country,
-    title,
-    summary: desc,
+    title: titlePT,
+    summary: descPT,
     publishedAt: published,
     sourceName: (new URL(link)).hostname,
     sourceUrl: link,
@@ -339,6 +348,7 @@ function renderArticleHTML({ item, bodyHtml }) {
         <div class="mt-8 p-4 rounded-xl bg-zinc-800 text-zinc-200">
           <strong>Fonte:</strong> <a href="${item.sourceUrl}" rel="nofollow noopener" target="_blank" class="underline">${item.sourceName}</a>
           <div class="text-xs text-zinc-400 mt-1">Trechos exibidos para fins de informação e citação, com link para a matéria original.</div>
+          <div class="text-xs text-zinc-400 mt-1">Tradução automática para pt-BR; confira a matéria original para o texto integral.</div>
         </div>
 
         <div class="mt-6 flex flex-wrap gap-3">
@@ -388,7 +398,11 @@ async function writeArticlePages(items) {
         headers: { 'user-agent': 'Mozilla/5.0 ComunistandoBot' }
       }).then(r => r.text()).catch(() => '');
       const preview = html ? extractPreviewParagraphs(html) : '<p>(Conteúdo indisponível no momento.)</p>';
-      const page = renderArticleHTML({ item, bodyHtml: preview });
+
+      // ===== PASSO 2.4 — traduz parágrafos do corpo =====
+      const previewPT = await translateHtmlParagraphs(preview);
+
+      const page = renderArticleHTML({ item, bodyHtml: previewPT });
 
       const outPath = path.resolve(`public${item.permalink}`);
       await fs.mkdir(path.dirname(outPath), { recursive: true });

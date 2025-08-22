@@ -9,6 +9,28 @@ import Parser from 'rss-parser';
 import * as cheerio from 'cheerio';
 import sources from './sources.js'; // << NÃO REMOVER
 
+function toAbsoluteUrl(possibleUrl, baseUrl) {
+  try {
+    if (!possibleUrl) return '';
+    // Ex.: //img.site.com/p.png -> https://img.site.com/p.png
+    if (possibleUrl.startsWith('//')) return 'https:' + possibleUrl;
+    // Resolve relativa: /img/p.png -> https://dominio-da-pagina/img/p.png
+    return new URL(possibleUrl, baseUrl).toString();
+  } catch {
+    return possibleUrl; // devolve como veio se não der pra resolver
+  }
+}
+
+function preferHttps(urlStr) {
+  try {
+    if (!urlStr) return '';
+    const u = new URL(urlStr);
+    if (u.protocol === 'http:') u.protocol = 'https:'; // “faz upgrade”
+    return u.toString();
+  } catch { return urlStr; }
+}
+
+
 // ====== Caminhos de saída ======
 const OUT_JSON = path.resolve('public/data/news.json');
 const OUT_RSS  = path.resolve('public/rss');
@@ -33,17 +55,22 @@ function rfc822(dateIso) {
 }
 
 // Pega imagem da página (og:image / twitter:image)
-async function getOgImage(url) {
+async function getOgImage(pageUrl) {
   try {
-    const html = await fetch(url, {
+    const html = await fetch(pageUrl, {
       headers: { 'user-agent': 'Mozilla/5.0 ComunistandoBot' }
     }).then(r => r.text());
     const $ = cheerio.load(html);
-    const img =
+    let img =
       $('meta[property="og:image"]').attr('content') ||
       $('meta[name="twitter:image"]').attr('content') ||
       '';
-    return img ? encodeURI(img) : '';
+    if (img) {
+      img = toAbsoluteUrl(img, pageUrl);
+      img = preferHttps(img);
+      img = encodeURI(img); // espaços etc.
+    }
+    return img || '';
   } catch {
     return '';
   }
@@ -55,13 +82,25 @@ async function fromRSS(src) {
   const items = (feed.items || []).slice(0, 3);
   const out = [];
   for (const item of items) {
-    const link = (item.link || '').trim();
-    const title = (item.title || '').trim();
-    if (!title || !link) continue; // ignora item ruim
+    let link = (item.link || '').trim();
+    if (!link) continue;
 
+    // normaliza o link (relativa -> absoluta) e prefere HTTPS
+    link = toAbsoluteUrl(link, src.url);
+    link = preferHttps(link);
+
+    const title = (item.title || '').trim();
+    if (!title) continue;
+
+    // imagem: usa enclosure, senão og:image
     let image = item.enclosure?.url || '';
-    if (!image) image = await getOgImage(link);
-    if (image) image = encodeURI(image);
+    if (image) {
+      image = toAbsoluteUrl(image, link);
+      image = preferHttps(image);
+      image = encodeURI(image);
+    } else {
+      image = await getOgImage(link);
+    }
 
     const summary = (item.contentSnippet || item.content || '')
       .replace(/\s+/g, ' ')
@@ -88,24 +127,30 @@ async function fromScrape(src) {
   });
   const html = await res.text();
   const $ = cheerio.load(html);
+
+  // acha o primeiro link de matéria na home, conforme selector da fonte
   const linkEl = $(src.pick?.selector).first();
   const href = linkEl.attr('href');
   if (!href) return []; // nada encontrado
 
-  const link = new URL(href, src.url).toString();
+  // 🔧 normaliza o link (relativa -> absoluta) e força https
+  let link = toAbsoluteUrl(href, src.url);
+  link = preferHttps(link);
 
+  // baixa a página da matéria
   const page = await fetch(link, {
     headers: { 'user-agent': 'Mozilla/5.0 ComunistandoBot' }
   }).then(r => r.text()).catch(() => '');
   const $$ = cheerio.load(page);
 
+  // título
   const title =
     ($$('meta[property="og:title"]').attr('content') ||
      $$('h1').first().text() ||
      $('title').text() ||
      '').trim();
 
-  // Resumo: tenta meta description; se não houver, pega 1º parágrafo com + de 60 chars
+  // resumo: tenta meta description; se não houver, pega 1º parágrafo mais encorpado
   let desc = ($$('meta[name="description"]').attr('content') || '').trim();
   if (!desc) {
     const p = $$('p')
@@ -115,16 +160,22 @@ async function fromScrape(src) {
     desc = (p || '').replace(/\s+/g, ' ').slice(0, 260);
   }
 
+  // data de publicação
   const published =
     $$('meta[property="article:published_time"]').attr('content') ||
     $$('time').attr('datetime') ||
     new Date().toISOString();
 
+  // 🔧 imagem: resolve URL relativa e força https
   let image =
     $$('meta[property="og:image"]').attr('content') ||
     $$('meta[name="twitter:image"]').attr('content') ||
     '';
-  if (image) image = encodeURI(image);
+  if (image) {
+    image = toAbsoluteUrl(image, link);
+    image = preferHttps(image);
+    image = encodeURI(image); // trata espaços etc.
+  }
 
   if (!title) return [];
 

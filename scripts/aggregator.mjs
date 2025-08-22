@@ -9,6 +9,7 @@ import Parser from 'rss-parser';
 import * as cheerio from 'cheerio';
 import sources from './sources.js'; // << NÃO REMOVER
 
+// ===================== Helpers de URL/HTTPS =====================
 function toAbsoluteUrl(possibleUrl, baseUrl) {
   try {
     if (!possibleUrl) return '';
@@ -30,19 +31,28 @@ function preferHttps(urlStr) {
   } catch { return urlStr; }
 }
 
+// Proxy opcional para evitar bloqueio/hotlink/mixed content
+function withImageProxy(urlStr) {
+  if (!urlStr) return '';
+  if (!SITE.imgProxy) return urlStr;
+  // usa images.weserv.nl para servir por HTTPS
+  const clean = urlStr.replace(/^https?:\/\//, '');
+  return `https://images.weserv.nl/?url=${encodeURIComponent(clean)}`;
+}
 
-// ====== Caminhos de saída ======
+// ===================== Caminhos de saída =====================
 const OUT_JSON = path.resolve('public/data/news.json');
 const OUT_RSS  = path.resolve('public/rss');
 
-// ====== Config do site ======
+// ===================== Config do site =====================
 const parser = new Parser({ timeout: 15000 });
 const SITE = {
   baseUrl: 'https://cuiamaster.github.io/comunistando', // troque se seu usuário não for cuiamaster
-  adsClient: 'ca-pub-1234567890123456' // placeholder
+  adsClient: 'ca-pub-1234567890123456', // placeholder
+  imgProxy: true // << ative/desative o proxy de imagens
 };
 
-// ====== Utilidades ======
+// ===================== Utilidades =====================
 function slugify(s) {
   return (s || '')
     .toLowerCase()
@@ -54,29 +64,50 @@ function rfc822(dateIso) {
   return new Date(dateIso || Date.now()).toUTCString();
 }
 
-// Pega imagem da página (og:image / twitter:image)
+// Tenta pegar a 1ª <img> útil do conteúdo (fallback quando não há og:image)
+function extractFirstContentImage(html, baseUrl) {
+  try {
+    const $ = cheerio.load(html);
+    const imgSel = $('article img, .article img, .content img, .post img, img');
+    const src = imgSel.first().attr('src') || '';
+    if (!src) return '';
+    let abs = toAbsoluteUrl(src, baseUrl);
+    abs = preferHttps(abs);
+    return encodeURI(abs);
+  } catch {
+    return '';
+  }
+}
+
+// Pega imagem da página (og:image / twitter:image) com fallback na 1ª <img>
 async function getOgImage(pageUrl) {
   try {
     const html = await fetch(pageUrl, {
       headers: { 'user-agent': 'Mozilla/5.0 ComunistandoBot' }
     }).then(r => r.text());
     const $ = cheerio.load(html);
+
+    // 1) og:image / twitter:image
     let img =
       $('meta[property="og:image"]').attr('content') ||
       $('meta[name="twitter:image"]').attr('content') ||
       '';
+
     if (img) {
       img = toAbsoluteUrl(img, pageUrl);
       img = preferHttps(img);
-      img = encodeURI(img); // espaços etc.
+      return encodeURI(img);
     }
-    return img || '';
+
+    // 2) fallback: 1ª <img> do conteúdo
+    const first = extractFirstContentImage(html, pageUrl);
+    return first || '';
   } catch {
     return '';
   }
 }
 
-// ====== Coleta via RSS (até 3 itens por fonte) ======
+// ===================== Coleta via RSS (até 3 itens por fonte) =====================
 async function fromRSS(src) {
   const feed = await parser.parseURL(src.url);
   const items = (feed.items || []).slice(0, 3);
@@ -92,15 +123,16 @@ async function fromRSS(src) {
     const title = (item.title || '').trim();
     if (!title) continue;
 
-    // imagem: usa enclosure, senão og:image
+    // imagem: enclosure -> og:image -> 1ª <img>
     let image = item.enclosure?.url || '';
     if (image) {
       image = toAbsoluteUrl(image, link);
       image = preferHttps(image);
       image = encodeURI(image);
     } else {
-      image = await getOgImage(link);
+      image = await getOgImage(link); // já tenta fallback
     }
+    if (image) image = withImageProxy(image); // aplica proxy (se ativo)
 
     const summary = (item.contentSnippet || item.content || '')
       .replace(/\s+/g, ' ')
@@ -120,7 +152,7 @@ async function fromRSS(src) {
   return out;
 }
 
-// ====== Coleta via scraping (pega 1ª matéria da home) ======
+// ===================== Coleta via scraping (pega 1ª matéria da home) =====================
 async function fromScrape(src) {
   const res = await fetch(src.url, {
     headers: { 'user-agent': 'Mozilla/5.0 ComunistandoBot' }
@@ -133,7 +165,7 @@ async function fromScrape(src) {
   const href = linkEl.attr('href');
   if (!href) return []; // nada encontrado
 
-  // 🔧 normaliza o link (relativa -> absoluta) e força https
+  // normaliza o link (relativa -> absoluta) e força https
   let link = toAbsoluteUrl(href, src.url);
   link = preferHttps(link);
 
@@ -150,7 +182,7 @@ async function fromScrape(src) {
      $('title').text() ||
      '').trim();
 
-  // resumo: tenta meta description; se não houver, pega 1º parágrafo mais encorpado
+  // resumo: meta description; senão, 1º parágrafo mais encorpado
   let desc = ($$('meta[name="description"]').attr('content') || '').trim();
   if (!desc) {
     const p = $$('p')
@@ -166,15 +198,19 @@ async function fromScrape(src) {
     $$('time').attr('datetime') ||
     new Date().toISOString();
 
-  // 🔧 imagem: resolve URL relativa e força https
+  // imagem: og/twitter -> fallback 1ª <img>, normaliza e proxy
   let image =
     $$('meta[property="og:image"]').attr('content') ||
     $$('meta[name="twitter:image"]').attr('content') ||
     '';
+  if (!image) {
+    image = extractFirstContentImage(page, link);
+  }
   if (image) {
     image = toAbsoluteUrl(image, link);
     image = preferHttps(image);
-    image = encodeURI(image); // trata espaços etc.
+    image = encodeURI(image);
+    image = withImageProxy(image); // aplica proxy (se ativo)
   }
 
   if (!title) return [];
@@ -190,7 +226,7 @@ async function fromScrape(src) {
   }];
 }
 
-// ====== RSS helpers ======
+// ===================== RSS helpers =====================
 function buildRSS({ items, title, link, description }) {
   const rssItems = items.map(n => `
     <item>
@@ -237,7 +273,7 @@ async function writeRSS(allNews, countries) {
   }
 }
 
-// ====== EXECUÇÃO PRINCIPAL ======
+// ===================== EXECUÇÃO PRINCIPAL =====================
 async function run() {
   // 1) Executa todas as fontes (RSS ou scrape)
   const jobs = sources.map(async (src) => {

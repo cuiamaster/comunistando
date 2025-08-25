@@ -447,8 +447,18 @@ async function run() {
     return { ...n, permalink: `/noticias/${slug}.html` };
   });
 
+  // 2.2) Reforço: garante que título e resumo estão em pt-BR
+  const translated = [];
+  for (const n of resultsWithPermalink) {
+    const [titlePT, summaryPT] = await Promise.all([
+      translate(n.title || '',   { target: 'pt' }),
+      translate(n.summary || '', { target: 'pt' })
+    ]);
+    translated.push({ ...n, title: titlePT, summary: summaryPT });
+  }
+
   // 3) Não sobrescrever JSON com vazio (preserva o anterior)
-  let final = resultsWithPermalink;
+  let final = translated;
   try {
     const prev = JSON.parse(await fs.readFile(OUT_JSON, 'utf-8'));
     if (final.length === 0 && Array.isArray(prev) && prev.length) {

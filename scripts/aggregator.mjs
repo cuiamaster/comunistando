@@ -1,14 +1,15 @@
 // scripts/aggregator.mjs
-// Coleta notícias das fontes, salva em public/data/news.json,
-// gera RSS (geral e por país), sitemap.xml e páginas internas por notícia.
+// Coleta notícias das fontes, traduz para pt-BR, salva em public/data/news.json,
+// gera páginas internas por notícia (em /public/noticias/*.html), RSS (geral e por país)
+// e sitemap.xml (home, categorias e artigos).
 // Projeto: Comunistando
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import Parser from 'rss-parser';
 import * as cheerio from 'cheerio';
-import sources from './sources.js'; // << NÃO REMOVER
-import { translate, translateHtmlParagraphs } from './translator.mjs'; // << NOVO
+import sources from './sources.js';
+import { translate, translateHtmlParagraphs } from './translator.mjs';
 
 // ===================== Helpers de URL/HTTPS =====================
 function toAbsoluteUrl(possibleUrl, baseUrl) {
@@ -20,6 +21,7 @@ function toAbsoluteUrl(possibleUrl, baseUrl) {
     return possibleUrl;
   }
 }
+
 function preferHttps(urlStr) {
   try {
     if (!urlStr) return '';
@@ -28,6 +30,7 @@ function preferHttps(urlStr) {
     return u.toString();
   } catch { return urlStr; }
 }
+
 // Proxy opcional para evitar bloqueio/hotlink/mixed content
 function withImageProxy(urlStr) {
   if (!urlStr) return '';
@@ -43,7 +46,7 @@ const OUT_RSS  = path.resolve('public/rss');
 // ===================== Config do site =====================
 const parser = new Parser({ timeout: 15000 });
 const SITE = {
-  baseUrl: 'https://cuiamaster.github.io/comunistando', // troque se seu usuário não for cuiamaster
+  baseUrl: 'https://cuiamaster.github.io/comunistando', // ajuste se seu usuário repositório mudar
   adsClient: 'ca-pub-1234567890123456', // placeholder
   imgProxy: true // proxy de imagens
 };
@@ -129,21 +132,22 @@ async function fromRSS(src) {
     }
     if (image) image = withImageProxy(image);
 
+    // resumo bruto
     const summaryRaw = (item.contentSnippet || item.content || '')
       .replace(/\s+/g, ' ')
       .trim()
       .slice(0, 260);
 
-    // ===== TRADUÇÃO (título e resumo) =====
-    const [title, summary] = await Promise.all([
-      translate(titleRaw,   { target: 'pt', source: 'auto' }),
-      translate(summaryRaw, { target: 'pt', source: 'auto' })
+    // === Tradução pt-BR ===
+    const [titlePT, summaryPT] = await Promise.all([
+      translate(titleRaw,  { target: 'pt' }),
+      translate(summaryRaw,{ target: 'pt' })
     ]);
 
     out.push({
       country: src.country,
-      title,
-      summary,
+      title: titlePT,
+      summary: summaryPT,
       publishedAt: item.isoDate || item.pubDate || new Date().toISOString(),
       sourceName: (new URL(feed.link || src.url)).hostname,
       sourceUrl: link,
@@ -182,16 +186,15 @@ async function fromScrape(src) {
      $$('h1').first().text() ||
      $('title').text() ||
      '').trim();
-  if (!titleRaw) return [];
 
   // resumo: meta description; senão, 1º parágrafo mais encorpado
-  let summaryRaw = ($$('meta[name="description"]').attr('content') || '').trim();
-  if (!summaryRaw) {
+  let descRaw = ($$('meta[name="description"]').attr('content') || '').trim();
+  if (!descRaw) {
     const p = $$('p')
       .map((i, el) => $$(el).text().trim())
       .get()
       .find(t => t.length > 60);
-    summaryRaw = (p || '').replace(/\s+/g, ' ').slice(0, 260);
+    descRaw = (p || '').replace(/\s+/g, ' ').slice(0, 260);
   }
 
   // data de publicação
@@ -215,16 +218,18 @@ async function fromScrape(src) {
     image = withImageProxy(image);
   }
 
-  // ===== TRADUÇÃO (título e resumo) =====
-  const [title, summary] = await Promise.all([
-    translate(titleRaw,   { target: 'pt', source: 'auto' }),
-    translate(summaryRaw, { target: 'pt', source: 'auto' })
+  if (!titleRaw) return [];
+
+  // === Tradução pt-BR ===
+  const [titlePT, descPT] = await Promise.all([
+    translate(titleRaw, { target: 'pt' }),
+    translate(descRaw,   { target: 'pt' })
   ]);
 
   return [{
     country: src.country,
-    title,
-    summary,
+    title: titlePT,
+    summary: descPT,
     publishedAt: published,
     sourceName: (new URL(link)).hostname,
     sourceUrl: link,
@@ -299,9 +304,10 @@ function renderArticleHTML({ item, bodyHtml }) {
   <meta property="og:url" content="${canonical}" />
   ${item.imageUrl ? `<meta property="og:image" content="${item.imageUrl}" />` : ''}
 
-  <!-- Tailwind para aplicar o layout -->
+  <!-- Tailwind para layout -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Seu CSS opcional -->
+
+  <!-- Seu CSS -->
   <link rel="stylesheet" href="../styles.css" />
 </head>
 <body class="min-h-screen bg-gradient-to-br from-red-900 via-zinc-900 to-black text-zinc-100 font-sans">
@@ -311,7 +317,7 @@ function renderArticleHTML({ item, bodyHtml }) {
         <a href="../index.html" class="text-3xl md:text-4xl font-extrabold tracking-tight">🟥 Comunistando</a>
         <span class="text-white/90 text-sm">${new Intl.DateTimeFormat('pt-BR', { dateStyle: 'full' }).format(new Date())}</span>
       </div>
-      <p class="text-white/90 max-w-3xl mt-2">Breaking News dos países socialistas e comunistas — em português do Brasil, com links e fontes oficiais.</p>
+      <p class="text-white/90 max-w-3xl mt-2">Notícias diárias dos países socialistas e comunistas — em português do Brasil, com links e fontes oficiais.</p>
       <nav class="mt-4 text-sm flex flex-wrap gap-3 text-white/90">
         <a href="../categoria/china/">China</a>
         <a href="../categoria/russia/">Rússia</a>
@@ -382,7 +388,7 @@ function extractPreviewParagraphs(html) {
     }
     if (!texts.length) return '<p>(Conteúdo completo disponível na matéria original.)</p>';
     const safe = texts
-      .map(p => p.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g,'&gt;'))
+      .map(p => p.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'))
       .join('</p><p>');
     return `<p>${safe}</p>`;
   } catch {
@@ -398,13 +404,17 @@ async function writeArticlePages(items) {
       }).then(r => r.text()).catch(() => '');
       const preview = html ? extractPreviewParagraphs(html) : '<p>(Conteúdo indisponível no momento.)</p>';
 
-      // ===== TRADUÇÃO do corpo e do resumo (para garantir PT-BR na página interna) =====
-      const [bodyHtml, summaryPT] = await Promise.all([
+      // === Tradução do corpo e reforço em título/resumo ===
+      const [bodyPT, titlePT, summaryPT] = await Promise.all([
         translateHtmlParagraphs(preview),
-        translate(item.summary || '', { target: 'pt', source: 'auto' })
+        translate(item.title || '',   { target: 'pt' }),
+        translate(item.summary || '', { target: 'pt' })
       ]);
 
-      const page = renderArticleHTML({ item: { ...item, summary: summaryPT }, bodyHtml });
+      const page = renderArticleHTML({
+        item: { ...item, title: titlePT, summary: summaryPT },
+        bodyHtml: bodyPT
+      });
 
       const outPath = path.resolve(`public${item.permalink}`);
       await fs.mkdir(path.dirname(outPath), { recursive: true });
@@ -456,10 +466,14 @@ async function run() {
   // 4.1) Gera páginas internas
   await writeArticlePages(final);
 
-  // 5) Países, sitemap e RSS
+  // 5) Países, sitemap (home + categorias + artigos) e RSS
   const countries = [...new Set(sources.map(s => s.country))];
 
-  const urls = [`${SITE.baseUrl}/`, ...countries.map(c => `${SITE.baseUrl}/categoria/${slugify(c)}/`)];
+  const urls = [
+    `${SITE.baseUrl}/`,
+    ...countries.map(c => `${SITE.baseUrl}/categoria/${slugify(c)}/`),
+    ...final.map(n => `${SITE.baseUrl}${n.permalink}`)
+  ];
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(u => `  <url><loc>${u}</loc></url>`).join('\n')}

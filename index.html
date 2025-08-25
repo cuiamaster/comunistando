@@ -30,7 +30,9 @@
       </nav>
       <div class="w-full mt-4">
         <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1234567890123456" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        <script>
+          try {(adsbygoogle = window.adsbygoogle || []).push({});} catch(e){}
+        </script>
       </div>
     </div>
   </header>
@@ -42,7 +44,9 @@
         <div class="bg-zinc-800 border border-zinc-700 shadow-lg rounded-2xl p-5">
           <h2 class="font-semibold mb-2 text-red-400">Anúncios</h2>
           <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1234567890123456" data-ad-slot="0987654321" data-ad-format="auto" data-full-width-responsive="true"></ins>
-          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+          <script>
+            try {(adsbygoogle = window.adsbygoogle || []).push({});} catch(e){}
+          </script>
         </div>
       </div>
     </aside>
@@ -56,26 +60,31 @@
   </footer>
 
   <script>
+    // Data no cabeçalho e ano no rodapé
     const D = new Date();
     document.getElementById('today').textContent = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'full' }).format(D);
     document.getElementById('year').textContent = D.getFullYear();
 
+    // Helpers
     function escapeHtml(s=''){return s.replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));}
     function formatDate(iso){try{return new Intl.DateTimeFormat('pt-BR',{dateStyle:'medium',timeStyle:'short'}).format(new Date(iso));}catch{return '';}}
 
+    // Carrega o JSON publicado em gh-pages (caminho correto no GitHub Pages)
     async function loadNews(){
       try{
         const r = await fetch('data/news.json', { cache: 'no-store' });
         const items = await r.json();
         renderNews(items);
-      }catch(e){}
+      }catch(e){
+        console.error('Falha ao carregar news.json', e);
+      }
     }
 
     function renderNews(items){
       const host = document.getElementById('news-list');
       host.innerHTML='';
       items.forEach((n)=>{
-        // Se houver permalink, usamos a página interna; senão, caímos no link da fonte
+        // Se houver permalink (página interna), usamos; senão, linkamos pra fonte
         const url = n.permalink ? ('.' + n.permalink) : n.sourceUrl;
 
         const card = document.createElement('article');
@@ -87,34 +96,38 @@
           </div>
 
           ${n.imageUrl ? `<a href="${url}">
-              <img src="${n.imageUrl}" alt="" class="w-full h-48 object-cover rounded-xl mb-3 border border-zinc-700" onerror="this.remove()"/>
+              <img src="${n.imageUrl}" alt="" loading="lazy" referrerpolicy="no-referrer"
+                   class="w-full h-48 object-cover rounded-xl mb-3 border border-zinc-700"
+                   onerror="this.remove()"/>
             </a>` : ``}
 
           <h3 class="text-xl font-bold leading-tight mb-2 text-white">
-            <a href="${url}" class="hover:underline">${escapeHtml(n.title)}</a>
+            <a href="${url}" class="hover:underline">${escapeHtml(n.title || '')}</a>
           </h3>
 
-          <p class="text-zinc-300 mb-3">${escapeHtml(n.summary)}</p>
+          <p class="text-zinc-300 mb-3">${escapeHtml(n.summary || '')}</p>
 
           <div class="flex items-center justify-between">
             <a class="inline-flex items-center gap-2 text-red-400 hover:text-red-300 font-medium" href="${url}">
-              Ler no Comunistando →
+              ${n.permalink ? 'Ler no Comunistando →' : 'Ler a matéria →'}
             </a>
-            <a class="inline-flex items-center gap-2 text-zinc-400 hover:text-zinc-200 text-sm" href="${n.sourceUrl}" target="_blank" rel="noopener noreferrer">
-              Fonte: ${escapeHtml(n.sourceName)} ↗
+            <a class="inline-flex items-center gap-2 text-zinc-400 hover:text-zinc-200 text-sm" href="${n.sourceUrl}" target="_blank" rel="noopener noreferrer nofollow">
+              Fonte: ${escapeHtml(n.sourceName || '')} ↗
             </a>
           </div>
         `;
         host.appendChild(card);
       });
 
+      // Bloco de anúncio no meio da lista
       const ad = document.createElement('div');
       ad.innerHTML = `
         <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1234567890123456" data-ad-slot="2468135790" data-ad-format="auto" data-full-width-responsive="true"></ins>
       `;
       host.insertBefore(ad, host.children[2] || null);
-      (adsbygoogle = window.adsbygoogle || []).push({});
+      try {(adsbygoogle = window.adsbygoogle || []).push({});} catch(e){}
     }
+
     loadNews();
   </script>
 </body>

@@ -8,7 +8,7 @@ import path from 'node:path';
 import Parser from 'rss-parser';
 import * as cheerio from 'cheerio';
 import sources from './sources.js'; // << NÃO REMOVER
-import { translate, translateHtmlParagraphs } from './translator.mjs'; // << IMPORTA O TRADUTOR
+import { translate, translateHtmlParagraphs } from './translator.mjs'; // << NOVO
 
 // ===================== Helpers de URL/HTTPS =====================
 function toAbsoluteUrl(possibleUrl, baseUrl) {
@@ -20,7 +20,6 @@ function toAbsoluteUrl(possibleUrl, baseUrl) {
     return possibleUrl;
   }
 }
-
 function preferHttps(urlStr) {
   try {
     if (!urlStr) return '';
@@ -29,7 +28,6 @@ function preferHttps(urlStr) {
     return u.toString();
   } catch { return urlStr; }
 }
-
 // Proxy opcional para evitar bloqueio/hotlink/mixed content
 function withImageProxy(urlStr) {
   if (!urlStr) return '';
@@ -117,8 +115,8 @@ async function fromRSS(src) {
     link = toAbsoluteUrl(link, src.url);
     link = preferHttps(link);
 
-    const rawTitle = (item.title || '').trim();
-    if (!rawTitle) continue;
+    const titleRaw = (item.title || '').trim();
+    if (!titleRaw) continue;
 
     // imagem: enclosure -> og:image -> 1ª <img>
     let image = item.enclosure?.url || '';
@@ -131,14 +129,16 @@ async function fromRSS(src) {
     }
     if (image) image = withImageProxy(image);
 
-    const rawSummary = (item.contentSnippet || item.content || '')
+    const summaryRaw = (item.contentSnippet || item.content || '')
       .replace(/\s+/g, ' ')
       .trim()
       .slice(0, 260);
 
-    // ===== TRADUÇÃO TÍTULO/RESUMO =====
-    const title   = await translate(rawTitle,   { target: 'pt' });
-    const summary = await translate(rawSummary, { target: 'pt' });
+    // ===== TRADUÇÃO (título e resumo) =====
+    const [title, summary] = await Promise.all([
+      translate(titleRaw,   { target: 'pt', source: 'auto' }),
+      translate(summaryRaw, { target: 'pt', source: 'auto' })
+    ]);
 
     out.push({
       country: src.country,
@@ -177,20 +177,21 @@ async function fromScrape(src) {
   const $$ = cheerio.load(page);
 
   // título
-  const rawTitle =
+  const titleRaw =
     ($$('meta[property="og:title"]').attr('content') ||
      $$('h1').first().text() ||
      $('title').text() ||
      '').trim();
+  if (!titleRaw) return [];
 
   // resumo: meta description; senão, 1º parágrafo mais encorpado
-  let rawDesc = ($$('meta[name="description"]').attr('content') || '').trim();
-  if (!rawDesc) {
+  let summaryRaw = ($$('meta[name="description"]').attr('content') || '').trim();
+  if (!summaryRaw) {
     const p = $$('p')
       .map((i, el) => $$(el).text().trim())
       .get()
       .find(t => t.length > 60);
-    rawDesc = (p || '').replace(/\s+/g, ' ').slice(0, 260);
+    summaryRaw = (p || '').replace(/\s+/g, ' ').slice(0, 260);
   }
 
   // data de publicação
@@ -214,16 +215,16 @@ async function fromScrape(src) {
     image = withImageProxy(image);
   }
 
-  if (!rawTitle) return [];
-
-  // ===== TRADUÇÃO TÍTULO/RESUMO =====
-  const title = await translate(rawTitle, { target: 'pt' });
-  const desc  = await translate(rawDesc,  { target: 'pt' });
+  // ===== TRADUÇÃO (título e resumo) =====
+  const [title, summary] = await Promise.all([
+    translate(titleRaw,   { target: 'pt', source: 'auto' }),
+    translate(summaryRaw, { target: 'pt', source: 'auto' })
+  ]);
 
   return [{
     country: src.country,
     title,
-    summary: desc,
+    summary,
     publishedAt: published,
     sourceName: (new URL(link)).hostname,
     sourceUrl: link,
@@ -300,7 +301,6 @@ function renderArticleHTML({ item, bodyHtml }) {
 
   <!-- Tailwind para aplicar o layout -->
   <script src="https://cdn.tailwindcss.com"></script>
-
   <!-- Seu CSS opcional -->
   <link rel="stylesheet" href="../styles.css" />
 </head>
@@ -396,12 +396,15 @@ async function writeArticlePages(items) {
       const html = await fetch(item.sourceUrl, {
         headers: { 'user-agent': 'Mozilla/5.0 ComunistandoBot' }
       }).then(r => r.text()).catch(() => '');
-      const previewOriginal = html ? extractPreviewParagraphs(html) : '<p>(Conteúdo indisponível no momento.)</p>';
+      const preview = html ? extractPreviewParagraphs(html) : '<p>(Conteúdo indisponível no momento.)</p>';
 
-      // ===== TRADUZ O CORPO (prévia) =====
-      const previewPT = await translateHtmlParagraphs(previewOriginal);
+      // ===== TRADUÇÃO do corpo e do resumo (para garantir PT-BR na página interna) =====
+      const [bodyHtml, summaryPT] = await Promise.all([
+        translateHtmlParagraphs(preview),
+        translate(item.summary || '', { target: 'pt', source: 'auto' })
+      ]);
 
-      const page = renderArticleHTML({ item, bodyHtml: previewPT });
+      const page = renderArticleHTML({ item: { ...item, summary: summaryPT }, bodyHtml });
 
       const outPath = path.resolve(`public${item.permalink}`);
       await fs.mkdir(path.dirname(outPath), { recursive: true });
@@ -450,7 +453,7 @@ async function run() {
   await fs.mkdir(path.dirname(OUT_JSON), { recursive: true });
   await fs.writeFile(OUT_JSON, JSON.stringify(final, null, 2), 'utf-8');
 
-  // 4.1) Gera páginas internas (com o corpo traduzido)
+  // 4.1) Gera páginas internas
   await writeArticlePages(final);
 
   // 5) Países, sitemap e RSS
@@ -465,7 +468,7 @@ ${urls.map(u => `  <url><loc>${u}</loc></url>`).join('\n')}
 
   await writeRSS(final, countries);
 
-  console.log(`News: ${final.length} itens publicados. Sitemap, RSS e páginas internas (traduzidas) gerados.`);
+  console.log(`News: ${final.length} itens publicados. Sitemap, RSS e páginas internas gerados.`);
 }
 
 run().catch((e) => { console.error(e); process.exit(1); });

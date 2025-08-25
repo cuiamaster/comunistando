@@ -4,7 +4,7 @@ name: Build & Publish (daily)
 on:
   workflow_dispatch:      # permite rodar manualmente
   schedule:
-    - cron: '5 10 * * *'  # todo dia ~07:05 em São Paulo
+    - cron: '5 10 * * *'  # todo dia ~07:05 em São Paulo (UTC-3)
   push:
     branches: [ main ]
     paths:
@@ -41,6 +41,25 @@ jobs:
       - name: Install deps
         run: npm ci || npm i
 
+      # Passo de depuração opcional para verificar o endpoint de tradução.
+      # Se falhar, não derruba o workflow (por isso o "|| true").
+      - name: Debug LT endpoint (temporário)
+        env:
+          LT_ENDPOINT: ${{ secrets.LT_ENDPOINT }}
+          LT_API_KEY: ${{ secrets.LT_API_KEY }}
+        run: |
+          echo "Testando LT_ENDPOINT: ${LT_ENDPOINT:-<vazio>}"
+          if [ -n "$LT_ENDPOINT" ]; then
+            echo '→ Fazendo POST de teste...'
+            curl -s -X POST "$LT_ENDPOINT" \
+              -H 'Content-Type: application/json' \
+              -d '{"q":"Hello world!","source":"auto","target":"pt","api_key":"'"$LT_API_KEY"'"}' \
+              || true
+            echo
+          else
+            echo "LT_ENDPOINT não definido (crie o Secret em Settings → Secrets and variables → Actions)."
+          fi
+
       - name: Build (gera JSON, páginas internas, RSS e sitemap)
         env:
           # >>> Defina estes segredos em Settings → Secrets and variables → Actions
@@ -51,6 +70,16 @@ jobs:
           echo "LT_ENDPOINT está definido? $([ -n "$LT_ENDPOINT" ] && echo sim || echo nao)"
           node -v
           npm run build
+
+      # Checagem rápida: mostra alguns títulos gerados para confirmar PT-BR
+      - name: Pós-build: checar títulos traduzidos
+        run: |
+          if [ -f public/data/news.json ]; then
+            echo "Exibindo até 3 títulos:"
+            (command -v jq >/dev/null 2>&1 && jq -r '.[0:3][] | "* \(.country): \(.title)"' public/data/news.json) || head -c 1000 public/data/news.json
+          else
+            echo "public/data/news.json não encontrado."
+          fi
 
       - name: Ensure .nojekyll
         run: |

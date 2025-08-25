@@ -1,0 +1,68 @@
+# .github/workflows/publish.yml
+name: Build & Publish (daily)
+
+on:
+  workflow_dispatch:      # permite rodar manualmente
+  schedule:
+    - cron: '5 10 * * *'  # todo dia ~07:05 em São Paulo
+  push:
+    branches: [ main ]
+    paths:
+      - 'scripts/**'
+      - 'public/**'
+      - 'categoria/**'
+      - 'index.html'
+      - 'styles.css'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'scripts/sources.js'
+      - '.github/workflows/publish.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: gh-pages
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci || npm i
+
+      - name: Build (gera JSON, páginas internas, RSS e sitemap)
+        env:
+          # >>> Defina estes segredos em Settings → Secrets and variables → Actions
+          LT_ENDPOINT: ${{ secrets.LT_ENDPOINT }}
+          LT_API_KEY: ${{ secrets.LT_API_KEY }}
+          TZ: America/Sao_Paulo
+        run: |
+          echo "LT_ENDPOINT está definido? $([ -n "$LT_ENDPOINT" ] && echo sim || echo nao)"
+          node -v
+          npm run build
+
+      - name: Ensure .nojekyll
+        run: |
+          mkdir -p public
+          touch public/.nojekyll
+
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: public
+          publish_branch: gh-pages
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'Publish: ${{ github.sha }}'

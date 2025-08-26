@@ -54,6 +54,7 @@ jobs:
         env:
           LT_ENDPOINT: ${{ secrets.LT_ENDPOINT }}
           LT_API_KEY: ${{ secrets.LT_API_KEY }}
+          DEBUG_TRANSLATOR: '1'
         run: |
           echo "LT_ENDPOINT: ${LT_ENDPOINT:-<vazio>}"
           node -e "import('./scripts/translator.mjs').then(async m => {
@@ -67,6 +68,7 @@ jobs:
         env:
           LT_ENDPOINT: ${{ secrets.LT_ENDPOINT }}
           LT_API_KEY: ${{ secrets.LT_API_KEY }}
+          DEBUG_TRANSLATOR: '1'
           TZ: America/Sao_Paulo
         run: |
           echo "LT_ENDPOINT está definido? $( [ -n "$LT_ENDPOINT" ] && echo sim || echo nao )"

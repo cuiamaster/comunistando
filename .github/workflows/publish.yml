@@ -42,6 +42,13 @@ jobs:
       - name: Install deps
         run: npm ci || npm i
 
+      # === LIMPA ARQUIVOS GERADOS DE RUNS ANTERIORES ===
+      - name: Clean previous generated files
+        run: |
+          rm -rf public/data || true
+          rm -rf public/rss || true
+          rm -f  public/sitemap.xml || true
+
       # ===== TESTE RÁPIDO DO TRADUTOR (antes do build) =====
       - name: Smoke test translator
         env:

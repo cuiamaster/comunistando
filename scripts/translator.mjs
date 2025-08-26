@@ -1,29 +1,38 @@
 // scripts/translator.mjs
 // Traduz texto para pt-BR com fallback entre múltiplos endpoints compatíveis com LibreTranslate.
 // Se LT_ENDPOINT/LT_API_KEY estiverem em Secrets, usa primeiro; senão tenta espelhos públicos.
-// Com DEBUG_TRANSLATOR=1 no ambiente, loga [TRAD_OK] / [TRAD_ERR] no console.
+// Com DEBUG_TRANSLATOR=1 no ambiente, loga [TRAD_OK] / [TRAD_ERR] / [TRAD_FALLBACK_ORIGINAL].
+//
+// Dica: em .github/workflows/publish.yml, passe os envs:
+//   LT_ENDPOINT: ${{ secrets.LT_ENDPOINT }}
+//   LT_API_KEY: ${{ secrets.LT_API_KEY }}
+//   DEBUG_TRANSLATOR: '1'   # opcional, só para log
 
 const FALLBACK_ENDPOINTS = [
-  process.env.LT_ENDPOINT,                               // (secreto do repositório)
-  'https://libretranslate.de/translate',                 // espelho público
-  'https://libretranslate.com/translate',                // oficial (pode rate-limitar)
-  'https://translate.argosopentech.com/translate'        // espelho público
+  process.env.LT_ENDPOINT,                          // (secreto do repositório, se existir)
+  'https://libretranslate.de/translate',            // espelho público
+  'https://libretranslate.com/translate',           // oficial (pode rate-limitar)
+  'https://translate.argosopentech.com/translate'   // espelho público
 ].filter(Boolean);
 
 const USER_AGENT = 'ComunistandoBot/1.0 (+https://github.com/cuiamaster/comunistando)';
 
-// Divide textos longos em blocos menores
+// Divide textos longos em blocos menores (evita payloads grandes demais)
 function chunk(str, size = 4000) {
   const parts = [];
   for (let i = 0; i < str.length; i += size) parts.push(str.slice(i, i + size));
   return parts;
 }
 
+// Faz 1 chamada ao endpoint LibreTranslate
 async function postLibreTranslate(endpoint, q, { source = 'auto', target = 'pt', apiKey }) {
   const res = await fetch(endpoint, {
     method: 'POST',
+    // timeout de 15s (Node 18+/20+)
+    signal: AbortSignal.timeout(15000),
     headers: {
       'Content-Type': 'application/json',
+      'Accept': 'application/json',
       'User-Agent': USER_AGENT
     },
     body: JSON.stringify({
@@ -37,12 +46,12 @@ async function postLibreTranslate(endpoint, q, { source = 'auto', target = 'pt',
 
   const bodyText = await res.text();
   if (!res.ok) {
-    throw new Error(`HTTP ${res.status} ${bodyText.slice(0, 120)}`);
+    throw new Error(`HTTP ${res.status} ${bodyText.slice(0, 160)}`);
   }
 
   let data;
   try { data = JSON.parse(bodyText); }
-  catch { throw new Error(`JSON inválido do endpoint: ${bodyText.slice(0, 120)}`); }
+  catch { throw new Error(`JSON inválido do endpoint: ${bodyText.slice(0, 160)}`); }
 
   // Implementações retornam { translatedText: '...' }
   const out = data?.translatedText || (Array.isArray(data) ? data[0]?.translatedText : '');
@@ -50,6 +59,7 @@ async function postLibreTranslate(endpoint, q, { source = 'auto', target = 'pt',
   return out;
 }
 
+// Traduz um único texto (string) para pt-BR
 export async function translate(text, { target = 'pt', source = 'auto' } = {}) {
   try {
     if (!text || !text.trim()) return '';
@@ -72,18 +82,18 @@ export async function translate(text, { target = 'pt', source = 'auto' } = {}) {
           if (process.env.DEBUG_TRANSLATOR) {
             console.log(`[TRAD_OK] ${ep} => "${block.slice(0, 40)}" -> "${t.slice(0, 40)}"`);
           }
-          break; // parou no primeiro que funcionou
+          break; // funcionou neste endpoint, para de tentar os outros
         } catch (e) {
           if (process.env.DEBUG_TRANSLATOR) {
             console.warn(`[TRAD_ERR] ${ep}: ${e.message}`);
           }
-          // tenta o próximo endpoint
+          // tenta próximo endpoint
         }
       }
 
       if (translated === null) {
         if (process.env.DEBUG_TRANSLATOR) {
-          console.warn('[TRAD_FALLBACK_ORIGINAL] Mantendo bloco original (todos os endpoints falharam).');
+          console.warn('[TRAD_FALLBACK_ORIGINAL] Mantendo bloco original (todos endpoints falharam).');
         }
         translated = block; // último recurso: mantém original
       }
@@ -120,4 +130,14 @@ export async function translateHtmlParagraphs(html) {
   } catch {
     return html;
   }
+}
+
+// (Opcional) Helper para traduzir várias strings de uma vez
+export async function translateMany(arr, opts = {}) {
+  const results = [];
+  for (const s of arr) {
+    // serial para não sobrecarregar os endpoints gratuitos
+    results.push(await translate(s, opts));
+  }
+  return results;
 }

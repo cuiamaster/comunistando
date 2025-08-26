@@ -42,23 +42,19 @@ jobs:
       - name: Install deps
         run: npm ci || npm i
 
-      # Depuração do endpoint de tradução (não falha o job se der erro)
-      - name: Debug LT endpoint (temporary)
+      # ===== TESTE RÁPIDO DO TRADUTOR (antes do build) =====
+      - name: Smoke test translator
         env:
           LT_ENDPOINT: ${{ secrets.LT_ENDPOINT }}
           LT_API_KEY: ${{ secrets.LT_API_KEY }}
         run: |
-          echo "Testando LT_ENDPOINT: ${LT_ENDPOINT:-<vazio>}"
-          if [ -n "$LT_ENDPOINT" ]; then
-            echo "→ Fazendo POST de teste..."
-            curl -s -X POST "$LT_ENDPOINT" \
-              -H 'Content-Type: application/json' \
-              -d "{\"q\":\"Hello world!\",\"source\":\"auto\",\"target\":\"pt\",\"api_key\":\"$LT_API_KEY\"}" \
-              || true
-            echo
-          else
-            echo "LT_ENDPOINT não definido (crie o Secret em Settings → Secrets and variables → Actions)."
-          fi
+          echo "LT_ENDPOINT: ${LT_ENDPOINT:-<vazio>}"
+          node -e "import('./scripts/translator.mjs').then(async m => {
+            const t1 = await m.translate('Hello world!', { target: 'pt' });
+            console.log('Smoke test 1 =>', t1);
+            const t2 = await m.translate('China announces economic reforms', { target: 'pt' });
+            console.log('Smoke test 2 =>', t2);
+          }).catch(e => { console.error('Smoke test FAILED:', e); process.exit(1); });"
 
       - name: Build (gera JSON, páginas internas, RSS e sitemap)
         env:
@@ -70,17 +66,22 @@ jobs:
           node -v
           npm run build
 
-      - name: Post-build check (titles)
+      # ===== CHECAGEM DO ARQUIVO PUBLICADO =====
+      - name: Post-build check (first 3 items)
         run: |
           if [ -f public/data/news.json ]; then
-            echo "Exibindo até 3 títulos:"
+            echo "Mostrando 3 títulos exatamente como foram salvos:"
             if command -v jq >/dev/null 2>&1; then
               jq -r '.[0:3][] | "* \(.country): \(.title)"' public/data/news.json
+              echo "----"
+              echo "Primeiro item completo:"
+              jq '.[0]' public/data/news.json
             else
-              head -c 1000 public/data/news.json
+              head -c 2000 public/data/news.json
             fi
           else
             echo "public/data/news.json não encontrado."
+            exit 1
           fi
 
       - name: Ensure .nojekyll

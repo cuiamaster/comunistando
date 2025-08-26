@@ -178,15 +178,21 @@ async function fromRSS(src) {
     (async ()=>{ await sleep(300); return translateMany(sums, { target: 'pt' }); })()
   ]);
 
-  const out = raw.map((r, i) => ({
-    country: r.country,
-    title: titlesPT[i] || r.titleRaw,
-    summary: sumsPT[i] || r.summaryRaw,
-    publishedAt: r.publishedAt,
-    sourceName: r.sourceName,
-    sourceUrl: r.sourceUrl,
-    imageUrl: r.imageUrl
-  }));
+  const mark = !!process.env.DEBUG_MARK_PT;
+
+  const out = raw.map((r, i) => {
+    const t = titlesPT[i] || r.titleRaw;
+    const s = sumsPT[i]   || r.summaryRaw;
+    return {
+      country: r.country,
+      title: mark ? `【PT】 ${t}` : t,
+      summary: mark ? `【PT】 ${s}` : s,
+      publishedAt: r.publishedAt,
+      sourceName: r.sourceName,
+      sourceUrl: r.sourceUrl,
+      imageUrl: r.imageUrl
+    };
+  });
 
   // Logs de depuração (aparecem no Actions)
   console.log(`[TRAD_DEBUG][RSS:${src.country}] Exemplo:`);
@@ -268,10 +274,12 @@ async function fromScrape(src) {
   console.log(`[TRAD_DEBUG][SCRAPE:${src.country}] EN: ${titleRaw}`);
   console.log(`[TRAD_DEBUG][SCRAPE:${src.country}] PT: ${titlePT}`);
 
+  const mark = !!process.env.DEBUG_MARK_PT;
+
   return [{
     country: src.country,
-    title: titlePT || titleRaw,
-    summary: descPT || descRaw,
+    title: mark ? `【PT】 ${titlePT || titleRaw}` : (titlePT || titleRaw),
+    summary: mark ? `【PT】 ${descPT || descRaw}` : (descPT || descRaw),
     publishedAt: published,
     sourceName: (new URL(link)).hostname,
     sourceUrl: link,
@@ -439,6 +447,8 @@ function extractPreviewParagraphs(html) {
 }
 
 async function writeArticlePages(items) {
+  const mark = !!process.env.DEBUG_MARK_PT;
+
   for (const item of items) {
     try {
       const html = await fetch(item.sourceUrl, {
@@ -454,7 +464,11 @@ async function writeArticlePages(items) {
       ]);
 
       const page = renderArticleHTML({
-        item: { ...item, title: titlePT, summary: summaryPT },
+        item: {
+          ...item,
+          title:   mark ? `【PT】 ${titlePT}`   : titlePT,
+          summary: mark ? `【PT】 ${summaryPT}` : summaryPT
+        },
         bodyHtml: bodyPT
       });
 

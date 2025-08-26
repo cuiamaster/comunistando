@@ -63,6 +63,22 @@ function rfc822(dateIso) {
   return new Date(dateIso || Date.now()).toUTCString();
 }
 
+function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+// ---------- Tradução em lote ----------
+const SEP = '\n<<<§SEP§>>>\n';
+async function translateMany(arr, { target='pt' } = {}) {
+  const safe = (arr || []).map(x => (x || '').toString());
+  if (safe.length === 0) return [];
+  const joined = safe.join(SEP);
+  const out    = await translate(joined, { target });
+  // Se o tradutor falhar e devolver o mesmo, ainda fragmenta sem quebrar
+  const parts  = out.split(SEP);
+  // Garante o mesmo comprimento (caso alguma quebra se perca)
+  while (parts.length < safe.length) parts.push('');
+  return parts.slice(0, safe.length);
+}
+
 // Tenta pegar a 1ª <img> útil do conteúdo (fallback quando não há og:image)
 function extractFirstContentImage(html, baseUrl) {
   try {
@@ -110,7 +126,9 @@ async function getOgImage(pageUrl) {
 async function fromRSS(src) {
   const feed = await parser.parseURL(src.url);
   const items = (feed.items || []).slice(0, 3);
-  const out = [];
+
+  // Monta array bruto primeiro
+  const raw = [];
   for (const item of items) {
     let link = (item.link || '').trim();
     if (!link) continue;
@@ -132,28 +150,49 @@ async function fromRSS(src) {
     }
     if (image) image = withImageProxy(image);
 
-    // resumo bruto
     const summaryRaw = (item.contentSnippet || item.content || '')
       .replace(/\s+/g, ' ')
       .trim()
       .slice(0, 260);
 
-    // === Tradução pt-BR ===
-    const [titlePT, summaryPT] = await Promise.all([
-      translate(titleRaw,  { target: 'pt' }),
-      translate(summaryRaw,{ target: 'pt' })
-    ]);
-
-    out.push({
+    raw.push({
       country: src.country,
-      title: titlePT,
-      summary: summaryPT,
+      titleRaw,
+      summaryRaw,
       publishedAt: item.isoDate || item.pubDate || new Date().toISOString(),
       sourceName: (new URL(feed.link || src.url)).hostname,
       sourceUrl: link,
       imageUrl: image || ''
     });
   }
+
+  if (!raw.length) return [];
+
+  // ---- Tradução em lote: títulos e resumos ----
+  const titles = raw.map(r => r.titleRaw);
+  const sums   = raw.map(r => r.summaryRaw);
+
+  // Pequena pausa entre lotes para evitar rate limit agressivo
+  const [titlesPT, sumsPT] = await Promise.all([
+    translateMany(titles, { target: 'pt' }),
+    (async ()=>{ await sleep(300); return translateMany(sums, { target: 'pt' }); })()
+  ]);
+
+  const out = raw.map((r, i) => ({
+    country: r.country,
+    title: titlesPT[i] || r.titleRaw,
+    summary: sumsPT[i] || r.summaryRaw,
+    publishedAt: r.publishedAt,
+    sourceName: r.sourceName,
+    sourceUrl: r.sourceUrl,
+    imageUrl: r.imageUrl
+  }));
+
+  // Logs de depuração (aparecem no Actions)
+  console.log(`[TRAD_DEBUG][RSS:${src.country}] Exemplo:`);
+  console.log('  EN:', raw[0].titleRaw);
+  console.log('  PT:', out[0].title);
+
   return out;
 }
 
@@ -220,16 +259,19 @@ async function fromScrape(src) {
 
   if (!titleRaw) return [];
 
-  // === Tradução pt-BR ===
+  // === Tradução (apenas 1 item) ===
   const [titlePT, descPT] = await Promise.all([
     translate(titleRaw, { target: 'pt' }),
-    translate(descRaw,   { target: 'pt' })
+    translate(descRaw,  { target: 'pt' })
   ]);
+
+  console.log(`[TRAD_DEBUG][SCRAPE:${src.country}] EN: ${titleRaw}`);
+  console.log(`[TRAD_DEBUG][SCRAPE:${src.country}] PT: ${titlePT}`);
 
   return [{
     country: src.country,
-    title: titlePT,
-    summary: descPT,
+    title: titlePT || titleRaw,
+    summary: descPT || descRaw,
     publishedAt: published,
     sourceName: (new URL(link)).hostname,
     sourceUrl: link,
@@ -447,18 +489,8 @@ async function run() {
     return { ...n, permalink: `/noticias/${slug}.html` };
   });
 
-  // 2.2) Reforço: garante que título e resumo estão em pt-BR
-  const translated = [];
-  for (const n of resultsWithPermalink) {
-    const [titlePT, summaryPT] = await Promise.all([
-      translate(n.title || '',   { target: 'pt' }),
-      translate(n.summary || '', { target: 'pt' })
-    ]);
-    translated.push({ ...n, title: titlePT, summary: summaryPT });
-  }
-
   // 3) Não sobrescrever JSON com vazio (preserva o anterior)
-  let final = translated;
+  let final = resultsWithPermalink;
   try {
     const prev = JSON.parse(await fs.readFile(OUT_JSON, 'utf-8'));
     if (final.length === 0 && Array.isArray(prev) && prev.length) {

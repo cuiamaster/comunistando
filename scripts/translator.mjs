@@ -1,19 +1,25 @@
 // scripts/translator.mjs
-// Traduz para pt-BR. Tenta LibreTranslate; se falhar, cai para MyMemory.
-// Evita mensagens de erro no HTML e respeita limites de tamanho.
+// Tradução para pt-BR com prioridade LibreTranslate (se houver endpoint nos Secrets)
+// e fallback MyMemory. Evita exceder limites e nunca imprime mensagens de erro no HTML.
 
-const LT_ENDPOINT = process.env.LT_ENDPOINT || 'https://libretranslate.com/translate';
+const LT_ENDPOINT = process.env.LT_ENDPOINT || ''; // deixe vazio se não tiver
 const LT_API_KEY  = process.env.LT_API_KEY || '';
+const LT_CONFIGURED = Boolean(LT_ENDPOINT);
 
+// util
 function chunk(str, size) {
   const out = [];
   for (let i = 0; i < str.length; i += size) out.push(str.slice(i, i + size));
   return out;
 }
+function esc(s='') {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
 
 // ---------------- LibreTranslate ----------------
 async function translateViaLibreTranslate(text, { target = 'pt', source = 'auto' } = {}) {
-  const blocks = chunk(text, 4500); // seguro para LT
+  if (!LT_CONFIGURED) throw new Error('LT not configured');
+  const blocks = chunk(text, 4500);
   const translated = [];
   for (const q of blocks) {
     const res = await fetch(LT_ENDPOINT, {
@@ -33,7 +39,6 @@ async function translateViaLibreTranslate(text, { target = 'pt', source = 'auto'
 
 // ---------------- MyMemory (fallback) ----------------
 function mapTarget(code) {
-  // Força pt-BR no MyMemory
   if (!code) return 'pt-BR';
   return code.toLowerCase() === 'pt' ? 'pt-BR' : code;
 }
@@ -41,26 +46,28 @@ function mapTarget(code) {
 async function translateViaMyMemory(text, { target = 'pt', source = 'auto' } = {}) {
   const tgt = mapTarget(target);
   const src = source || 'auto';
-  const blocks = chunk(text, 450); // < 500 para evitar LIMIT EXCEEDED
+
+  // Mantemos cada requisição < 500 chars (limite do serviço)
+  const blocks = chunk(text, 450);
   const translated = [];
 
   for (const q of blocks) {
     const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(q)}&langpair=${encodeURIComponent(src)}|${encodeURIComponent(tgt)}`;
-    const res = await fetch(url);
-    if (!res.ok) {
-      // se der erro de rede, devolve o pedaço original (sem quebrar a página)
-      translated.push(q);
-      continue;
-    }
-    const data = await res.json();
-    const status = data?.responseStatus;
-    let t = data?.responseData?.translatedText || '';
-
-    // Se status != 200 ou o serviço retornar aquela mensagem chata, usa texto original
-    if (status !== 200 || /QUERY LENGTH LIMIT/i.test(t)) {
-      translated.push(q);
-    } else {
-      translated.push(t);
+    let t = '';
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`MyMemory HTTP ${res.status}`);
+      const data = await res.json();
+      const status = data?.responseStatus;
+      t = data?.responseData?.translatedText || '';
+      // Se vier aviso/erro no texto, usa original daquele pedaço
+      if (status !== 200 || /QUERY LENGTH LIMIT|MYMEMORY WARNING|INVALID|PLEASE INVOKE/i.test(t)) {
+        translated.push(q);
+      } else {
+        translated.push(t);
+      }
+    } catch {
+      translated.push(q); // rede/limite: mantém original para não quebrar
     }
   }
   return translated.join('');
@@ -68,22 +75,24 @@ async function translateViaMyMemory(text, { target = 'pt', source = 'auto' } = {
 
 // ---------------- API pública ----------------
 export async function translate(text, opts = {}) {
+  if (!text) return '';
   try {
-    if (!text) return '';
-    // Tenta LT primeiro (se estiver acessível/permitido)
+    // tenta LT se configurado
     return await translateViaLibreTranslate(text, opts);
   } catch (e) {
-    console.warn('LibreTranslate falhou, caindo para MyMemory:', e.message);
+    // cai para MyMemory (ou mantém original se também falhar)
   }
   try {
     return await translateViaMyMemory(text, opts);
-  } catch (e) {
-    console.warn('MyMemory falhou, mantendo original:', e.message);
+  } catch {
     return text;
   }
 }
 
-// Traduz HTML com <p>…</p>, parágrafo por parágrafo (evita blocos enormes)
+// Traduz HTML com <p>…</p>
+// - Se LT configurado: traduz tudo (em blocos grandes).
+// - Se sem LT: traduz APENAS até ~430 chars (2 parágrafos máx) em uma chamada (evita limite),
+//   e o restante fica no idioma original (mas sem mensagens de erro).
 export async function translateHtmlParagraphs(html) {
   try {
     const parts = html
@@ -94,23 +103,40 @@ export async function translateHtmlParagraphs(html) {
 
     if (!parts.length) return html;
 
-    const translated = [];
-    for (const p of parts) {
-      // guilhotina preventiva: evita blocos gigantes (LT aguenta, MyMemory não)
-      const safe = p.slice(0, 3000);
-      const t = await translate(safe, { target: 'pt' });
-      translated.push(t);
+    const clean = parts.map(p => p.replace(/\s+/g, ' ').trim()).filter(Boolean);
+
+    if (LT_CONFIGURED) {
+      // junta tudo e traduz com LT (robusto, sem limites apertados)
+      const joined = clean.join('\n\n');
+      const t = await translate(joined, { target: 'pt' });
+      const back = t.split(/\n{2,}/).map(seg => seg.trim()).filter(Boolean);
+      return back.map(seg => `<p>${esc(seg)}</p>`).join('\n');
     }
 
-    // remonta HTML escapando tags no conteúdo
-    return translated.map(seg =>
-      `<p>${seg
-        .replace(/&/g,'&amp;')
-        .replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;')}</p>`
-    ).join('\n');
-  } catch (e) {
-    console.warn('translateHtmlParagraphs falhou, mantendo HTML original:', e.message);
+    // ---- caminho MyMemory: 1 chamada só, <= 430 chars, 2 parágrafos máx ----
+    let buf = '';
+    let count = 0;
+    const maxChars = 430;
+    for (const p of clean) {
+      const candidate = buf ? `${buf}\n\n${p}` : p;
+      if (candidate.length <= maxChars && count < 2) {
+        buf = candidate;
+        count++;
+      } else {
+        break;
+      }
+    }
+
+    let translatedHtml = '';
+    if (buf) {
+      const t = await translateViaMyMemory(buf, { target: 'pt' });
+      const back = t.split(/\n{2,}/).map(seg => seg.trim()).filter(Boolean);
+      translatedHtml = back.map(seg => `<p>${esc(seg)}</p>`).join('\n');
+    }
+
+    const rest = clean.slice(count).map(p => `<p>${esc(p)}</p>`).join('\n');
+    return [translatedHtml, rest].filter(Boolean).join('\n');
+  } catch {
     return html;
   }
 }

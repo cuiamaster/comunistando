@@ -62,61 +62,31 @@ function slugify(s) {
 function rfc822(dateIso) {
   return new Date(dateIso || Date.now()).toUTCString();
 }
-
 function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
-const SEP = '\n<<<§SEP§>>>\n';
-const MARK = !!process.env.DEBUG_MARK_PT;
 
-// Normaliza para comparação "traduzido x original"
+// Normaliza para comparar “traduzido x original”
 function norm(s){ return (s||'').toString().trim().replace(/\s+/g,' ').toLowerCase(); }
 // Heurística simples: parece inglês?
 function looksEnglish(s){
   const t = (s||'').toLowerCase();
   const hits = [' the ',' and ',' of ',' to ',' in ',' for ',' with ',' on ',' from ',' by ']
     .reduce((acc,w)=> acc + (t.includes(w)?1:0), 0);
-  return hits >= 2; // 2+ palavras muito comuns de EN
+  return hits >= 2;
 }
 
-// ---------- Tradução com “dupla tentativa” ----------
-async function translateSmartOne(text){
-  const a = await translate(text, { target:'pt' });
-  if (norm(a) && norm(a) !== norm(text)) return { out:a, changed:true, tried:'auto' };
-  // se o texto parecia inglês ou não mudou, tenta forçar source:'en'
+// ---------- Tradução robusta, item a item ----------
+async function translateSmart(text){
+  if (!text) return { out: '', changed:false, via:'none' };
+  // 1) tenta auto
+  let a = await translate(text, { target:'pt' });
+  if (norm(a) && norm(a) !== norm(text)) return { out:a, changed:true, via:'auto' };
+  // 2) se parece EN, força source:'en'
   if (looksEnglish(text)) {
-    const b = await translate(text, { target:'pt', source:'en' });
-    if (norm(b) && norm(b) !== norm(text)) return { out:b, changed:true, tried:'en' };
+    let b = await translate(text, { target:'pt', source:'en' });
+    if (norm(b) && norm(b) !== norm(text)) return { out:b, changed:true, via:'en' };
   }
-  return { out:text, changed:false, tried:'none' };
-}
-
-async function translateMany(arr, { target='pt' } = {}) {
-  const safe = (arr || []).map(x => (x || '').toString());
-  if (!safe.length) return [];
-
-  // 1ª passada em lote (auto)
-  const joined = safe.join(SEP);
-  const first  = await translate(joined, { target });
-  const parts  = first.split(SEP);
-  while (parts.length < safe.length) parts.push('');
-
-  // 2ª passada individual só nos que não mudaram e “parecem EN”
-  const fixed = [];
-  for (let i=0;i<safe.length;i++){
-    const orig = safe[i];
-    const maybe = parts[i] || '';
-    if (norm(maybe) !== norm(orig)) {
-      fixed.push(maybe); // já traduziu
-      continue;
-    }
-    if (!looksEnglish(orig)) { // provavelmente já PT/ES/etc
-      fixed.push(orig);
-      continue;
-    }
-    const forced = await translate(orig, { target:'pt', source:'en' });
-    fixed.push(norm(forced)!==norm(orig) ? forced : orig);
-    await sleep(120); // evita rate limit
-  }
-  return fixed;
+  // 3) sem mudança -> mantém
+  return { out:text, changed:false, via:'none' };
 }
 
 // Tenta pegar a 1ª <img> útil do conteúdo (fallback quando não há og:image)
@@ -164,8 +134,8 @@ async function getOgImage(pageUrl) {
 async function fromRSS(src) {
   const feed = await parser.parseURL(src.url);
   const items = (feed.items || []).slice(0, 3);
+  const out = [];
 
-  const raw = [];
   for (const item of items) {
     let link = (item.link || '').trim();
     if (!link) continue;
@@ -176,6 +146,7 @@ async function fromRSS(src) {
     const titleRaw = (item.title || '').trim();
     if (!titleRaw) continue;
 
+    // imagem: enclosure -> og:image -> 1ª <img>
     let image = item.enclosure?.url || '';
     if (image) {
       image = toAbsoluteUrl(image, link);
@@ -186,52 +157,32 @@ async function fromRSS(src) {
     }
     if (image) image = withImageProxy(image);
 
+    // resumo bruto
     const summaryRaw = (item.contentSnippet || item.content || '')
       .replace(/\s+/g, ' ')
       .trim()
       .slice(0, 260);
 
-    raw.push({
+    // Tradução item a item (com fallback)
+    const [t, s] = await Promise.all([
+      translateSmart(titleRaw),
+      translateSmart(summaryRaw)
+    ]);
+    // Pausa mínima para evitar throttling agressivo em endpoints grátis
+    await sleep(120);
+
+    out.push({
       country: src.country,
-      titleRaw,
-      summaryRaw,
+      title: t.out,
+      summary: s.out,
       publishedAt: item.isoDate || item.pubDate || new Date().toISOString(),
       sourceName: (new URL(feed.link || src.url)).hostname,
       sourceUrl: link,
       imageUrl: image || ''
     });
+
+    console.log(`[TRAD_DEBUG][RSS:${src.country}] "${titleRaw}" -> "${t.out}" via ${t.via}`);
   }
-
-  if (!raw.length) return [];
-
-  // Tradução em lote
-  const titlesPT = await translateMany(raw.map(r=>r.titleRaw), { target:'pt' });
-  await sleep(200);
-  const sumsPT   = await translateMany(raw.map(r=>r.summaryRaw), { target:'pt' });
-
-  const out = raw.map((r, i) => {
-    const t = titlesPT[i] || r.titleRaw;
-    const s = sumsPT[i]   || r.summaryRaw;
-    const tChanged = norm(t) !== norm(r.titleRaw);
-    const sChanged = norm(s) !== norm(r.summaryRaw);
-    return {
-      country: r.country,
-      title:   (MARK && tChanged) ? `【PT】 ${t}` : t,
-      summary: (MARK && sChanged) ? `【PT】 ${s}` : s,
-      publishedAt: r.publishedAt,
-      sourceName: r.sourceName,
-      sourceUrl: r.sourceUrl,
-      imageUrl: r.imageUrl
-    };
-  });
-
-  // Logs de depuração (aparecem no Actions)
-  console.log(`[TRAD_DEBUG][RSS:${src.country}] Exemplo:`);
-  if (out[0]) {
-    console.log('  EN:', raw[0].titleRaw);
-    console.log('  PT:', out[0].title);
-  }
-
   return out;
 }
 
@@ -243,24 +194,29 @@ async function fromScrape(src) {
   const html = await res.text();
   const $ = cheerio.load(html);
 
+  // acha o primeiro link de matéria na home, conforme selector da fonte
   const linkEl = $(src.pick?.selector).first();
   const href = linkEl.attr('href');
-  if (!href) return [];
+  if (!href) return []; // nada encontrado
 
+  // normaliza o link (relativa -> absoluta) e força https
   let link = toAbsoluteUrl(href, src.url);
   link = preferHttps(link);
 
+  // baixa a página da matéria
   const page = await fetch(link, {
     headers: { 'user-agent': 'Mozilla/5.0 ComunistandoBot' }
   }).then(r => r.text()).catch(() => '');
   const $$ = cheerio.load(page);
 
+  // título
   const titleRaw =
     ($$('meta[property="og:title"]').attr('content') ||
      $$('h1').first().text() ||
      $('title').text() ||
      '').trim();
 
+  // resumo: meta description; senão, 1º parágrafo mais encorpado
   let descRaw = ($$('meta[name="description"]').attr('content') || '').trim();
   if (!descRaw) {
     const p = $$('p')
@@ -270,16 +226,20 @@ async function fromScrape(src) {
     descRaw = (p || '').replace(/\s+/g, ' ').slice(0, 260);
   }
 
+  // data de publicação
   const published =
     $$('meta[property="article:published_time"]').attr('content') ||
     $$('time').attr('datetime') ||
     new Date().toISOString();
 
+  // imagem: og/twitter -> fallback 1ª <img>, normaliza e proxy
   let image =
     $$('meta[property="og:image"]').attr('content') ||
     $$('meta[name="twitter:image"]').attr('content') ||
     '';
-  if (!image) image = extractFirstContentImage(page, link);
+  if (!image) {
+    image = extractFirstContentImage(page, link);
+  }
   if (image) {
     image = toAbsoluteUrl(image, link);
     image = preferHttps(image);
@@ -289,16 +249,18 @@ async function fromScrape(src) {
 
   if (!titleRaw) return [];
 
-  const t1 = await translateSmartOne(titleRaw);
-  const d1 = await translateSmartOne(descRaw);
+  // === Tradução (individual) ===
+  const [t, d] = await Promise.all([
+    translateSmart(titleRaw),
+    translateSmart(descRaw)
+  ]);
 
-  console.log(`[TRAD_DEBUG][SCRAPE:${src.country}] EN: ${titleRaw}`);
-  console.log(`[TRAD_DEBUG][SCRAPE:${src.country}] PT: ${t1.out} (changed=${t1.changed} via ${t1.tried})`);
+  console.log(`[TRAD_DEBUG][SCRAPE:${src.country}] "${titleRaw}" -> "${t.out}" via ${t.via}`);
 
   return [{
     country: src.country,
-    title:   (MARK && t1.changed) ? `【PT】 ${t1.out}` : t1.out,
-    summary: (MARK && d1.changed) ? `【PT】 ${d1.out}` : d1.out,
+    title: t.out,
+    summary: d.out,
     publishedAt: published,
     sourceName: (new URL(link)).hostname,
     sourceUrl: link,
@@ -473,10 +435,9 @@ async function writeArticlePages(items) {
       }).then(r => r.text()).catch(() => '');
       const preview = html ? extractPreviewParagraphs(html) : '<p>(Conteúdo indisponível no momento.)</p>';
 
-      // corpo traduz com a função existente (auto). se ficar igual e parecer EN, força EN por parágrafo
+      // corpo: tenta auto; se vier igual e parecer EN, força EN por parágrafo
       let bodyPT = await translateHtmlParagraphs(preview);
       if (norm(bodyPT) === norm(preview) && looksEnglish(preview.replace(/<[^>]+>/g,''))) {
-        // fallback “manual” por parágrafo
         const parts = preview.split(/<\/p>/i).map(x=>x.trim()).filter(Boolean)
           .map(x => x.replace(/^<p[^>]*>/i,'').trim());
         const joined = parts.join('\n\n');
@@ -488,15 +449,13 @@ async function writeArticlePages(items) {
       }
 
       // título e resumo com fallback inteligente
-      const t1 = await translateSmartOne(item.title || '');
-      const s1 = await translateSmartOne(item.summary || '');
+      const [t, s] = await Promise.all([
+        translateSmart(item.title || ''),
+        translateSmart(item.summary || '')
+      ]);
 
       const page = renderArticleHTML({
-        item: {
-          ...item,
-          title:   (MARK && t1.changed) ? `【PT】 ${t1.out}` : t1.out,
-          summary: (MARK && s1.changed) ? `【PT】 ${s1.out}` : s1.out
-        },
+        item: { ...item, title: t.out, summary: s.out },
         bodyHtml: bodyPT
       });
 

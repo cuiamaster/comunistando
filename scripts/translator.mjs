@@ -1,6 +1,6 @@
 // scripts/translator.mjs
 // Traduz texto para pt-BR com múltiplos fallbacks.
-// Ordem: LT_ENDPOINT (secreto) → espelhos LibreTranslate → MyMemory → original.
+// Ordem: LibreTranslate (seu endpoint e espelhos) → MyMemory (nunca 'auto') → original.
 // Com DEBUG_TRANSLATOR=1, loga [TRAD_OK] / [TRAD_ERR] / [TRAD_MM_OK] / [TRAD_FALLBACK_ORIGINAL].
 
 const LT_ENDPOINTS = [
@@ -18,23 +18,49 @@ function chunkHard(str, size = 4000) {
   for (let i = 0; i < str.length; i += size) parts.push(str.slice(i, i + size));
   return parts;
 }
-
-// Quebra “suave” para MyMemory (limite menor) tentando em espaços
 function chunkSoft(str, size = 450) {
   const out = [];
   let s = (str || '').toString();
   while (s.length > size) {
     let cut = s.lastIndexOf(' ', size);
-    if (cut < size * 0.6) cut = size; // se não achar espaço “perto”, corta seco
+    if (cut < size * 0.6) cut = size;
     out.push(s.slice(0, cut));
     s = s.slice(cut);
   }
   if (s) out.push(s);
   return out;
 }
-
 function norm(s){ return (s || '').toString().trim().replace(/\s+/g,' '); }
 function changed(a, b){ return norm(a) !== norm(b); }
+
+// Heurística simples para adivinhar o idioma de origem (nunca devolve 'auto')
+function guessLang(text) {
+  const s = (text || '').toString();
+
+  // Scripts
+  if (/\p{Script=Han}/u.test(s)) return 'zh-CN';           // chinês
+  if (/\p{Script=Cyrillic}/u.test(s)) return 'ru';          // russo
+  if (/\p{Script=Arabic}/u.test(s)) return 'ar';
+  if (/\p{Script=Hebrew}/u.test(s)) return 'he';
+  if (/\p{Script=Hangul}/u.test(s)) return 'ko';
+  if (/\p{Script=Devanagari}/u.test(s)) return 'hi';
+
+  // Palavras-função comuns
+  const looksEN = /\b(the|and|of|to|in|for|with|on|from|by|is|are|be|was|were)\b/i.test(s);
+  if (looksEN) return 'en';
+
+  const looksES = /[ñáéíóúü]|(?:\b(el|la|los|las|de|y|que|en|por|con|para|como)\b)/i.test(s);
+  if (looksES) return 'es';
+
+  const looksFR = /[àâçéèêëîïôûùüÿœ]|(?:\b(le|la|les|des|du|et|pour|avec|sur|dans)\b)/i.test(s);
+  if (looksFR) return 'fr';
+
+  const looksPT = /[ãõáéíóúç]|(?:\b(que|de|e|em|para|com|por|como)\b)/i.test(s);
+  if (looksPT) return 'pt';
+
+  // Padrão: assumimos inglês (boa aproximação para as fontes)
+  return 'en';
+}
 
 // ======================= LibreTranslate =======================
 async function postLibreTranslate(endpoint, q, { source = 'auto', target = 'pt', apiKey }) {
@@ -46,19 +72,11 @@ async function postLibreTranslate(endpoint, q, { source = 'auto', target = 'pt',
       'Accept': 'application/json',
       'User-Agent': USER_AGENT
     },
-    body: JSON.stringify({
-      q,
-      source,
-      target,
-      format: 'text',
-      api_key: apiKey || undefined
-    })
+    body: JSON.stringify({ q, source, target, format: 'text', api_key: apiKey || undefined })
   });
 
   const bodyText = await res.text();
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status} ${bodyText.slice(0, 160)}`);
-  }
+  if (!res.ok) throw new Error(`HTTP ${res.status} ${bodyText.slice(0, 160)}`);
 
   let data;
   try { data = JSON.parse(bodyText); }
@@ -72,115 +90,114 @@ async function postLibreTranslate(endpoint, q, { source = 'auto', target = 'pt',
 async function tryLibreTranslate(text, { source='auto', target='pt' }={}) {
   const blocks = chunkHard(text, 4000);
   const apiKey = process.env.LT_API_KEY || undefined;
-  const result = [];
+  const out = [];
 
   for (const block of blocks) {
-    let translated = null, used = null, lastErr = null;
+    let translated = null, lastErr = null;
     for (const ep of LT_ENDPOINTS.length ? LT_ENDPOINTS : ['https://libretranslate.de/translate']) {
       try {
         const t = await postLibreTranslate(ep, block, { source, target, apiKey });
         translated = t;
-        used = ep;
-        if (process.env.DEBUG_TRANSLATOR) {
-          console.log(`[TRAD_OK] LT ${ep} => "${block.slice(0,40)}" -> "${t.slice(0,40)}"`);
-        }
+        if (process.env.DEBUG_TRANSLATOR) console.log(`[TRAD_OK] LT ${ep} => "${block.slice(0,40)}" -> "${t.slice(0,40)}"`);
         break;
       } catch (e) {
         lastErr = e;
         if (process.env.DEBUG_TRANSLATOR) console.warn(`[TRAD_ERR] LT ${ep}: ${e.message}`);
       }
     }
-    if (translated === null) {
-      // todos falharam; propaga último erro pra subir fallback MyMemory
-      throw lastErr || new Error('LT sem resposta');
-    }
-    result.push(translated);
+    if (translated === null) throw lastErr || new Error('LT sem resposta');
+    out.push(translated);
   }
-  return result.join('');
+  return out.join('');
 }
 
-// ======================= MyMemory fallback =======================
-// Doc rápida: https://mymemory.translated.net/doc/spec.php
-async function myMemoryOne(q, { source='auto', target='pt' } = {}) {
+// ======================= MyMemory (sem 'auto') =======================
+async function myMemoryOne(q, { source, target }) {
+  // Nunca use 'auto' aqui!
+  const src = (source || 'en').toUpperCase();
+  const tgt = (target || 'pt-BR').toUpperCase();
+
   const url = new URL('https://api.mymemory.translated.net/get');
   url.searchParams.set('q', q);
-  url.searchParams.set('langpair', `${source}|${target}`);
-  // opcional: url.searchParams.set('de', 'seu-email@dominio.com');
+  url.searchParams.set('langpair', `${src}|${tgt}`);
+  if (process.env.MYMEMORY_EMAIL) url.searchParams.set('de', process.env.MYMEMORY_EMAIL);
 
   const res = await fetch(url.toString(), {
     method: 'GET',
     signal: AbortSignal.timeout(12000),
     headers: { 'User-Agent': USER_AGENT, 'Accept': 'application/json' }
   });
+
   const bodyText = await res.text();
   let data;
   try { data = JSON.parse(bodyText); }
   catch { throw new Error(`MyMemory JSON inválido: ${bodyText.slice(0,160)}`); }
 
-  const best = data?.responseData?.translatedText || '';
-  if (!best) throw new Error(`MyMemory sem resposta útil: ${bodyText.slice(0,160)}`);
-  return best;
+  const status = data?.responseStatus;
+  const translated = data?.responseData?.translatedText || '';
+  if (status !== 200) {
+    throw new Error(`MyMemory status ${status}: ${data?.responseDetails || translated || 'erro'}`);
+  }
+  return translated;
 }
 
-async function tryMyMemory(text, { source='auto', target='pt' } = {}) {
-  const blocks = chunkSoft(text, 450); // limites menores
+async function tryMyMemory(text, { source, target='pt' } = {}) {
+  // normaliza destino p/ PT-BR (MyMemory entende bem)
+  const mmTarget = (target && target.toLowerCase() === 'pt') ? 'pt-BR' : target;
+  const src = source && source.toLowerCase() !== 'auto' ? source : guessLang(text);
+
+  const blocks = chunkSoft(text, 450);
   const out = [];
   for (const b of blocks) {
     try {
-      const t = await myMemoryOne(b, { source, target });
-      if (process.env.DEBUG_TRANSLATOR) {
-        console.log(`[TRAD_MM_OK] "${b.slice(0,40)}" -> "${t.slice(0,40)}"`);
-      }
+      const t = await myMemoryOne(b, { source: src, target: mmTarget });
+      if (process.env.DEBUG_TRANSLATOR) console.log(`[TRAD_MM_OK] ${src}->${mmTarget}: "${b.slice(0,40)}" -> "${t.slice(0,40)}"`);
       out.push(t);
     } catch (e) {
-      if (process.env.DEBUG_TRANSLATOR) console.warn(`[TRAD_ERR] MyMemory: ${e.message}`);
-      out.push(b); // mantém original deste pedacinho
+      if (process.env.DEBUG_TRANSLATOR) console.warn(`[TRAD_ERR] MyMemory ${src}->${mmTarget}: ${e.message}`);
+      out.push(b); // mantém original do bloco
     }
-    // pequena pausa para não irritar o serviço gratuito
-    await new Promise(r => setTimeout(r, 120));
+    await new Promise(r => setTimeout(r, 120)); // gentil com o serviço
   }
   return out.join('');
 }
 
 // ======================= API principal =======================
-// Traduz um único texto (string) para pt-BR
 export async function translate(text, { target='pt', source='auto' } = {}) {
   try {
     if (!text || !text.trim()) return '';
 
-    // 1) Tenta LibreTranslate (auto)
+    // 1) LT em auto
     try {
       const t = await tryLibreTranslate(text, { source, target });
       if (changed(t, text)) return t;
     } catch {}
 
-    // 2) Se parecer inglês, força EN no LT
-    const looksEN = /\b(the|and|of|to|in|for|with|on|from|by)\b/i.test(text);
-    if (looksEN) {
+    // 2) LT forçando idioma se parecer inglês (ajuda muito)
+    const guess = guessLang(text);
+    if (guess === 'en') {
       try {
         const t2 = await tryLibreTranslate(text, { source: 'en', target });
         if (changed(t2, text)) return t2;
       } catch {}
     }
 
-    // 3) Fallback MyMemory (auto)
+    // 3) MyMemory SEM 'auto' (usa guessLang)
     try {
-      const mm = await tryMyMemory(text, { source: 'auto', target });
+      const mm = await tryMyMemory(text, { source: guess, target });
       if (changed(mm, text)) return mm;
     } catch {}
 
-    // 4) Fallback MyMemory (forçando EN se parecer inglês)
-    if (looksEN) {
+    // 4) como extra: se não parecia EN, tenta MM forçando EN (às vezes resolve)
+    if (guess !== 'en') {
       try {
         const mm2 = await tryMyMemory(text, { source: 'en', target });
         if (changed(mm2, text)) return mm2;
       } catch {}
     }
 
-    if (process.env.DEBUG_TRANSLATOR) {
-      console.warn('[TRAD_FALLBACK_ORIGINAL] Sem tradução confiável; mantendo original.');
-    }
-    return text; // último recurso
+    if (process.env.DEBUG_TRANSLATOR) console.warn('[TRAD_FALLBACK_ORIGINAL] Sem tradução confiável; mantendo original.');
+    return text;
   } catch (e) {
     console.warn('Falha na tradução, usando original:', e.message);
     return text;
@@ -194,15 +211,14 @@ export async function translateHtmlParagraphs(html) {
       .split(/<\/p>/i)
       .map(x => x.trim())
       .filter(Boolean)
-      .map(x => x.replace(/^<p[^>]*>/i, '').trim()); // tira a tag <p> de abertura
+      .map(x => x.replace(/^<p[^>]*>/i, '').trim());
 
     if (!pieces.length) return html;
 
     const joined = pieces.join('\n\n');
-    const t = await translate(joined, { target: 'pt' });
+    const t = await translate(joined, { target: 'pt' }); // target 'pt' (LT) vira 'pt-BR' no MM
     const back = (t || '').split(/\n{2,}/).map(seg => seg.trim()).filter(Boolean);
 
-    // reempacota em <p>...</p> escapando HTML
     const esc = (s) => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     return back.map(seg => `<p>${esc(seg)}</p>`).join('\n');
   } catch {
@@ -210,11 +226,9 @@ export async function translateHtmlParagraphs(html) {
   }
 }
 
-// (Opcional) Traduz várias strings, de forma serial (evita rate-limit)
+// (opcional) várias strings em série
 export async function translateMany(arr, opts = {}) {
   const results = [];
-  for (const s of (arr || [])) {
-    results.push(await translate(s, opts));
-  }
+  for (const s of (arr || [])) results.push(await translate(s, opts));
   return results;
 }

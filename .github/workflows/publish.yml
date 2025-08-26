@@ -4,10 +4,9 @@ name: Build & Publish (daily)
 on:
   workflow_dispatch:
   schedule:
-    - cron: '5 10 * * *'   # ~07:05 em São Paulo (UTC-3)
+    - cron: '5 10 * * *'
   push:
-    branches:
-      - main
+    branches: [ main ]
     paths:
       - scripts/**
       - public/**
@@ -42,19 +41,19 @@ jobs:
       - name: Install deps
         run: npm ci || npm i
 
-      # === LIMPA ARQUIVOS GERADOS DE RUNS ANTERIORES ===
       - name: Clean previous generated files
         run: |
           rm -rf public/data || true
-          rm -rf public/rss || true
+          rm -rf public/rss  || true
           rm -f  public/sitemap.xml || true
 
-      # ===== TESTE RÁPIDO DO TRADUTOR (antes do build) =====
+      # Smoke test do tradutor (já com as mesmas vars do build)
       - name: Smoke test translator
         env:
           LT_ENDPOINT: ${{ secrets.LT_ENDPOINT }}
           LT_API_KEY: ${{ secrets.LT_API_KEY }}
           DEBUG_TRANSLATOR: '1'
+          DEBUG_MARK_PT: '1'
         run: |
           echo "LT_ENDPOINT: ${LT_ENDPOINT:-<vazio>}"
           node -e "import('./scripts/translator.mjs').then(async m => {
@@ -69,21 +68,20 @@ jobs:
           LT_ENDPOINT: ${{ secrets.LT_ENDPOINT }}
           LT_API_KEY: ${{ secrets.LT_API_KEY }}
           DEBUG_TRANSLATOR: '1'
+          DEBUG_MARK_PT: '1'
           TZ: America/Sao_Paulo
         run: |
           echo "LT_ENDPOINT está definido? $( [ -n "$LT_ENDPOINT" ] && echo sim || echo nao )"
           node -v
           npm run build
 
-      # ===== CHECAGEM DO ARQUIVO PUBLICADO =====
       - name: Post-build check (first 3 items)
         run: |
           if [ -f public/data/news.json ]; then
             echo "Mostrando 3 títulos exatamente como foram salvos:"
             if command -v jq >/dev/null 2>&1; then
               jq -r '.[0:3][] | "* \(.country): \(.title)"' public/data/news.json
-              echo "----"
-              echo "Primeiro item completo:"
+              echo "---- Primeiro item completo ----"
               jq '.[0]' public/data/news.json
             else
               head -c 2000 public/data/news.json

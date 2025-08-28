@@ -31,6 +31,30 @@ function preferHttps(urlStr) {
   } catch { return urlStr; }
 }
 
+// Remove ruído de tracking e normaliza variações (utm, fbclid, #, /amp etc.)
+function canonicalUrl(u) {
+  try {
+    const url = new URL(u);
+    url.hash = ''; // remove #fragment
+    url.hostname = url.hostname.toLowerCase();
+    // remove utm_* e trackers comuns
+    const bad = new Set([
+      'utm_source','utm_medium','utm_campaign','utm_term','utm_content',
+      'gclid','fbclid','igshid','spm','ref','ref_','source','from','ocid'
+    ]);
+    for (const [k] of url.searchParams) {
+      if (bad.has(k) || k.toLowerCase().startsWith('utm_')) url.searchParams.delete(k);
+    }
+    // normaliza AMP (/amp no fim do path)
+    url.pathname = url.pathname.replace(/\/amp\/?$/i, '').replace(/\/+$/,'');
+    // remove search vazio
+    url.search = url.searchParams.toString() ? `?${url.searchParams.toString()}` : '';
+    return url.toString();
+  } catch {
+    return u || '';
+  }
+}
+
 // Proxy opcional para evitar bloqueio/hotlink/mixed content
 function withImageProxy(urlStr) {
   if (!urlStr) return '';
@@ -64,29 +88,52 @@ function rfc822(dateIso) {
 }
 function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
 
-// Normaliza para comparar “traduzido x original”
-function norm(s){ return (s||'').toString().trim().replace(/\s+/g,' ').toLowerCase(); }
-// Heurística simples: parece inglês?
-function looksEnglish(s){
-  const t = (s||'').toLowerCase();
-  const hits = [' the ',' and ',' of ',' to ',' in ',' for ',' with ',' on ',' from ',' by ']
-    .reduce((acc,w)=> acc + (t.includes(w)?1:0), 0);
-  return hits >= 2;
+// ---------- Tradução em lote ----------
+const SEP = '\n<<<§SEP§>>>\n';
+async function translateMany(arr, { target='pt' } = {}) {
+  const safe = (arr || []).map(x => (x || '').toString());
+  if (safe.length === 0) return [];
+  const joined = safe.join(SEP);
+  const out    = await translate(joined, { target });
+  const parts  = out.split(SEP);
+  while (parts.length < safe.length) parts.push('');
+  return parts.slice(0, safe.length);
 }
 
-// ---------- Tradução robusta, item a item ----------
-async function translateSmart(text){
-  if (!text) return { out: '', changed:false, via:'none' };
-  // 1) tenta auto
-  let a = await translate(text, { target:'pt' });
-  if (norm(a) && norm(a) !== norm(text)) return { out:a, changed:true, via:'auto' };
-  // 2) se parece EN, força source:'en'
-  if (looksEnglish(text)) {
-    let b = await translate(text, { target:'pt', source:'en' });
-    if (norm(b) && norm(b) !== norm(text)) return { out:b, changed:true, via:'en' };
+// ---------- DEDUPLICAÇÃO ----------
+function dedupeNews(items) {
+  const map = new Map();
+  for (const n of items) {
+    const keyUrl = canonicalUrl(n.sourceUrl || '');
+    const keyTitle = `${slugify(n.country||'')}:${slugify(n.title||'')}`;
+    const key = keyUrl || keyTitle; // usa URL limpa; se não tiver, cai no par país+título
+
+    const prev = map.get(key);
+    if (!prev) { map.set(key, n); continue; }
+
+    // Escolhe a "melhor" entrada:
+    // 1) quem tem imagem
+    // 2) resumo mais longo
+    // 3) data mais recente
+    const hasImgPrev = !!(prev.imageUrl);
+    const hasImgCurr = !!(n.imageUrl);
+    const sumPrev = (prev.summary || '').length;
+    const sumCurr = (n.summary || '').length;
+    const datePrev = Date.parse(prev.publishedAt || 0) || 0;
+    const dateCurr = Date.parse(n.publishedAt || 0) || 0;
+
+    let keep = prev;
+    if (!hasImgPrev && hasImgCurr) keep = n;
+    else if (hasImgPrev === hasImgCurr && sumCurr > sumPrev) keep = n;
+    else if (hasImgPrev === hasImgCurr && sumCurr === sumPrev && dateCurr > datePrev) keep = n;
+
+    map.set(key, keep);
   }
-  // 3) sem mudança -> mantém
-  return { out:text, changed:false, via:'none' };
+  const result = [...map.values()];
+  if (process.env.DEBUG_TRANSLATOR) {
+    console.log(`[DEDUP] Entradas antes: ${items.length} | depois: ${result.length}`);
+  }
+  return result;
 }
 
 // Tenta pegar a 1ª <img> útil do conteúdo (fallback quando não há og:image)
@@ -134,8 +181,9 @@ async function getOgImage(pageUrl) {
 async function fromRSS(src) {
   const feed = await parser.parseURL(src.url);
   const items = (feed.items || []).slice(0, 3);
-  const out = [];
 
+  // Monta array bruto primeiro
+  const raw = [];
   for (const item of items) {
     let link = (item.link || '').trim();
     if (!link) continue;
@@ -157,32 +205,48 @@ async function fromRSS(src) {
     }
     if (image) image = withImageProxy(image);
 
-    // resumo bruto
     const summaryRaw = (item.contentSnippet || item.content || '')
       .replace(/\s+/g, ' ')
       .trim()
       .slice(0, 260);
 
-    // Tradução item a item (com fallback)
-    const [t, s] = await Promise.all([
-      translateSmart(titleRaw),
-      translateSmart(summaryRaw)
-    ]);
-    // Pausa mínima para evitar throttling agressivo em endpoints grátis
-    await sleep(120);
-
-    out.push({
+    raw.push({
       country: src.country,
-      title: t.out,
-      summary: s.out,
+      titleRaw,
+      summaryRaw,
       publishedAt: item.isoDate || item.pubDate || new Date().toISOString(),
       sourceName: (new URL(feed.link || src.url)).hostname,
       sourceUrl: link,
       imageUrl: image || ''
     });
-
-    console.log(`[TRAD_DEBUG][RSS:${src.country}] "${titleRaw}" -> "${t.out}" via ${t.via}`);
   }
+
+  if (!raw.length) return [];
+
+  // ---- Tradução em lote: títulos e resumos ----
+  const titles = raw.map(r => r.titleRaw);
+  const sums   = raw.map(r => r.summaryRaw);
+
+  const [titlesPT, sumsPT] = await Promise.all([
+    translateMany(titles, { target: 'pt' }),
+    (async ()=>{ await sleep(300); return translateMany(sums, { target: 'pt' }); })()
+  ]);
+
+  const out = raw.map((r, i) => ({
+    country: r.country,
+    title: titlesPT[i] || r.titleRaw,
+    summary: sumsPT[i] || r.summaryRaw,
+    publishedAt: r.publishedAt,
+    sourceName: r.sourceName,
+    sourceUrl: r.sourceUrl,
+    imageUrl: r.imageUrl
+  }));
+
+  if (process.env.DEBUG_TRANSLATOR) {
+    console.log(`[TRAD_DEBUG][RSS:${src.country}] EN: ${raw[0].titleRaw}`);
+    console.log(`[TRAD_DEBUG][RSS:${src.country}] PT: ${out[0].title}`);
+  }
+
   return out;
 }
 
@@ -194,29 +258,24 @@ async function fromScrape(src) {
   const html = await res.text();
   const $ = cheerio.load(html);
 
-  // acha o primeiro link de matéria na home, conforme selector da fonte
   const linkEl = $(src.pick?.selector).first();
   const href = linkEl.attr('href');
-  if (!href) return []; // nada encontrado
+  if (!href) return [];
 
-  // normaliza o link (relativa -> absoluta) e força https
   let link = toAbsoluteUrl(href, src.url);
   link = preferHttps(link);
 
-  // baixa a página da matéria
   const page = await fetch(link, {
     headers: { 'user-agent': 'Mozilla/5.0 ComunistandoBot' }
   }).then(r => r.text()).catch(() => '');
   const $$ = cheerio.load(page);
 
-  // título
   const titleRaw =
     ($$('meta[property="og:title"]').attr('content') ||
      $$('h1').first().text() ||
      $('title').text() ||
      '').trim();
 
-  // resumo: meta description; senão, 1º parágrafo mais encorpado
   let descRaw = ($$('meta[name="description"]').attr('content') || '').trim();
   if (!descRaw) {
     const p = $$('p')
@@ -226,13 +285,11 @@ async function fromScrape(src) {
     descRaw = (p || '').replace(/\s+/g, ' ').slice(0, 260);
   }
 
-  // data de publicação
   const published =
     $$('meta[property="article:published_time"]').attr('content') ||
     $$('time').attr('datetime') ||
     new Date().toISOString();
 
-  // imagem: og/twitter -> fallback 1ª <img>, normaliza e proxy
   let image =
     $$('meta[property="og:image"]').attr('content') ||
     $$('meta[name="twitter:image"]').attr('content') ||
@@ -249,18 +306,20 @@ async function fromScrape(src) {
 
   if (!titleRaw) return [];
 
-  // === Tradução (individual) ===
-  const [t, d] = await Promise.all([
-    translateSmart(titleRaw),
-    translateSmart(descRaw)
+  const [titlePT, descPT] = await Promise.all([
+    translate(titleRaw, { target: 'pt' }),
+    translate(descRaw,  { target: 'pt' })
   ]);
 
-  console.log(`[TRAD_DEBUG][SCRAPE:${src.country}] "${titleRaw}" -> "${t.out}" via ${t.via}`);
+  if (process.env.DEBUG_TRANSLATOR) {
+    console.log(`[TRAD_DEBUG][SCRAPE:${src.country}] EN: ${titleRaw}`);
+    console.log(`[TRAD_DEBUG][SCRAPE:${src.country}] PT: ${titlePT}`);
+  }
 
   return [{
     country: src.country,
-    title: t.out,
-    summary: d.out,
+    title: titlePT || titleRaw,
+    summary: descPT || descRaw,
     publishedAt: published,
     sourceName: (new URL(link)).hostname,
     sourceUrl: link,
@@ -435,27 +494,15 @@ async function writeArticlePages(items) {
       }).then(r => r.text()).catch(() => '');
       const preview = html ? extractPreviewParagraphs(html) : '<p>(Conteúdo indisponível no momento.)</p>';
 
-      // corpo: tenta auto; se vier igual e parecer EN, força EN por parágrafo
-      let bodyPT = await translateHtmlParagraphs(preview);
-      if (norm(bodyPT) === norm(preview) && looksEnglish(preview.replace(/<[^>]+>/g,''))) {
-        const parts = preview.split(/<\/p>/i).map(x=>x.trim()).filter(Boolean)
-          .map(x => x.replace(/^<p[^>]*>/i,'').trim());
-        const joined = parts.join('\n\n');
-        const forced = await translate(joined, { target:'pt', source:'en' });
-        const back = forced.split(/\n{2,}/).map(seg => seg.trim()).filter(Boolean);
-        bodyPT = back.map(seg =>
-          `<p>${seg.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>`
-        ).join('\n');
-      }
-
-      // título e resumo com fallback inteligente
-      const [t, s] = await Promise.all([
-        translateSmart(item.title || ''),
-        translateSmart(item.summary || '')
+      // === Tradução do corpo e reforço em título/resumo ===
+      const [bodyPT, titlePT, summaryPT] = await Promise.all([
+        translateHtmlParagraphs(preview),
+        translate(item.title || '',   { target: 'pt' }),
+        translate(item.summary || '', { target: 'pt' })
       ]);
 
       const page = renderArticleHTML({
-        item: { ...item, title: t.out, summary: s.out },
+        item: { ...item, title: titlePT, summary: summaryPT },
         bodyHtml: bodyPT
       });
 
@@ -480,18 +527,21 @@ async function run() {
     }
   });
 
-  // 2) Junta todos os itens
+  // 2) Junta todos os itens (crus)
   const fetched = (await Promise.all(jobs)).filter(Boolean);
   const results = fetched.flat();
 
-  // 2.1) Adiciona permalink para páginas internas
-  const resultsWithPermalink = results.map((n) => {
+  // 2.1) DEDUPE (remove duplicadas por URL canônica / país+título)
+  const deduped = dedupeNews(results);
+
+  // 2.2) Adiciona permalink para páginas internas (depois de dedup)
+  const finalWithPermalink = deduped.map((n) => {
     const slug = `${slugify(n.country)}-${slugify(n.title)}`.slice(0, 120);
     return { ...n, permalink: `/noticias/${slug}.html` };
   });
 
   // 3) Não sobrescrever JSON com vazio (preserva o anterior)
-  let final = resultsWithPermalink;
+  let final = finalWithPermalink;
   try {
     const prev = JSON.parse(await fs.readFile(OUT_JSON, 'utf-8'));
     if (final.length === 0 && Array.isArray(prev) && prev.length) {
@@ -525,7 +575,7 @@ ${urls.map(u => `  <url><loc>${u}</loc></url>`).join('\n')}
 
   await writeRSS(final, countries);
 
-  console.log(`News: ${final.length} itens publicados. Sitemap, RSS e páginas internas gerados.`);
+  console.log(`News: ${final.length} itens publicados. (dedup aplicado). Sitemap, RSS e páginas internas gerados.`);
 }
 
 run().catch((e) => { console.error(e); process.exit(1); });

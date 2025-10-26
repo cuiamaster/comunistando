@@ -3,7 +3,7 @@
     "country": "China",
     "title": "Educação, taxas de saúde entre as principais preocupações",
     "summary": "China vai legislar sobre educação pré-escolar",
-    "publishedAt": "2025-10-25T10:20:31.118Z",
+    "publishedAt": "2025-10-26T10:20:28.393Z",
     "sourceName": "www.chinadaily.com.cn",
     "sourceUrl": "https://www.chinadaily.com.cn/a/201712/12/WS5a2f29d4a3108bc8c6721a30.html",
     "imageUrl": "https://images.weserv.nl/?url=www.chinadaily.com.cn%2Fimage_e%2F2020%2Flogo_chinadaily.jpg",
@@ -13,7 +13,7 @@
     "country": "China",
     "title": "Grupo internacional elogia reavivamento verde",
     "summary": "Um órgão consultivo internacional de alto nível aplaudiu os esforços da China para melhorar o meio ambiente e sugeriu uma estratégia de 15 anos contra a poluição em um projeto de relatório de recomendação na segunda-feira.",
-    "publishedAt": "2025-10-25T10:20:32.076Z",
+    "publishedAt": "2025-10-26T10:20:28.661Z",
     "sourceName": "www.chinadaily.com.cn",
     "sourceUrl": "https://www.chinadaily.com.cn/a/201712/12/WS5a2f2701a3108bc8c6721a16.html",
     "imageUrl": "https://images.weserv.nl/?url=www.chinadaily.com.cn%2Fimage_e%2F2020%2Flogo_chinadaily.jpg",
@@ -21,72 +21,72 @@
   },
   {
     "country": "Rússia",
-    "title": "Ataques russos à Ucrânia matam pelo menos 2 pessoas",
+    "title": "Ataque de drone russo mata 3 na capital da Ucrânia, diz prefeito",
+    "summary": "Entre os feridos estavam seis crianças, disse o prefeito Vitali Klitschko.",
+    "publishedAt": "2025-10-26T07:37:50.000Z",
+    "sourceName": "www.themoscowtimes.com",
+    "sourceUrl": "https://www.themoscowtimes.com/2025/10/26/russian-drone-strike-kills-3-in-ukraine-capital-mayor-says-a90933",
+    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2F3b%2F90933__3b7306e45b28625441dff95dc8ca2ff8.jpg",
+    "permalink": "/noticias/russia-ataque-de-drone-russo-mata-3-na-capital-da-ucrania-diz-prefeito.html"
+  },
+  {
+    "country": "Rússia",
+    "title": "Putin diz que Rússia testou com sucesso míssil nuclear 'Burevestnik'",
+    "summary": "O Chefe do Estado-Maior General Valery Gerasimov disse a Putin que o teste ocorreu na terça-feira, com o míssil voando 8.700 milhas ao longo de 15 horas.",
+    "publishedAt": "2025-10-26T06:42:00.000Z",
+    "sourceName": "www.themoscowtimes.com",
+    "sourceUrl": "https://www.themoscowtimes.com/2025/10/26/putin-says-russia-successfully-tested-burevestnik-nuclear-powered-missile-a90932",
+    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2Fb5%2F90932__b568ed5826aa7ba65671fb96b6a841b5.jpg",
+    "permalink": "/noticias/russia-putin-diz-que-russia-testou-com-sucesso-missil-nuclear-burevestnik.html"
+  },
+  {
+    "country": "Rússia",
+    "title": "Ataques russos na Ucrânia matam 4 e ferem cerca de 20",
     "summary": "O ataque ocorre no momento em que os aliados ocidentais de Kiev aumentam a pressão sobre a Rússia, à medida que a guerra entra em seu quarto inverno.",
-    "publishedAt": "2025-10-25T08:05:05.000Z",
+    "publishedAt": "2025-10-25T08:05:00.000Z",
     "sourceName": "www.themoscowtimes.com",
     "sourceUrl": "https://www.themoscowtimes.com/2025/10/25/russian-strikes-on-ukraine-kill-at-least-2-a90931",
     "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2Fee%2F90931__eef766a6fbfb6a3cebddc66760bc0ef6.jpg",
-    "permalink": "/noticias/russia-ataques-russos-a-ucrania-matam-pelo-menos-2-pessoas.html"
-  },
-  {
-    "country": "Rússia",
-    "title": "Ex-prefeito de Rostov-on-Don preso por suposto abuso de poder",
-    "summary": "Logvinenko é acusado de causar mais de 47 milhões de rublos ($ 583.300) em danos ao orçamento da cidade.",
-    "publishedAt": "2025-10-24T15:02:53.000Z",
-    "sourceName": "www.themoscowtimes.com",
-    "sourceUrl": "https://www.themoscowtimes.com/2025/10/24/ex-mayor-of-rostov-on-don-arrested-over-alleged-abuse-of-power-a90930",
-    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2F87%2F90930__8727f9545272b243cfed7a37c97df1d8.jpg",
-    "permalink": "/noticias/russia-ex-prefeito-de-rostov-on-don-preso-por-suposto-abuso-de-poder.html"
-  },
-  {
-    "country": "Rússia",
-    "title": "Promotoria busca 440 horas de serviço comunitário para o político da oposição Shlosberg",
-    "summary": "Shlosberg pode pegar até cinco anos de prisão se for considerado culpado. As autoridades acusam Shlosberg de pedir um cessar-fogo na Ucrânia durante um debate em janeiro.",
-    "publishedAt": "2025-10-24T14:53:20.000Z",
-    "sourceName": "www.themoscowtimes.com",
-    "sourceUrl": "https://www.themoscowtimes.com/2025/10/24/prosecution-seeks-440-hours-of-community-service-for-opposition-politician-shlosberg-a90929",
-    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2Fd1%2F90929__d1dc5191e7e53e1042c14c358525da18.jpg",
-    "permalink": "/noticias/russia-promotoria-busca-440-horas-de-servico-comunitario-para-o-politico-da-oposicao-shlosberg.html"
+    "permalink": "/noticias/russia-ataques-russos-na-ucrania-matam-4-e-ferem-cerca-de-20.html"
   },
   {
     "country": "Cuba",
-    "title": "Voz de solidariedade do Zimbábue com Cuba diante do bloqueio dos EUA",
-    "summary": "Gokwe, Zimbabwe, 25 out (Prensa Latina) El director de la Academia Esperanza de Gaza y Presidente de la Organización Antisanciones de Zimbabwe, Norbert Hosho, expresó hoy categórico apoyo a Cuba contra el inhumano bloqueo impuesto hace más de seis décadas por ",
-    "publishedAt": "2025-10-25T10:15:17.000Z",
+    "title": "Destaca-se o papel das mulheres palestinas na luta contra a ocupação",
+    "summary": "Ramala, 26 out (Prensa Latina) El primer ministro Mohammad Mustafa rindió hoy homenaje a las mujeres palestinas por su lucha histórica en favor de la independencia y contra la ocupación israelí. O post Resaltan papel de mujeres palestinas en la lucha contra ",
+    "publishedAt": "2025-10-26T10:09:49.000Z",
     "sourceName": "www.prensa-latina.cu",
-    "sourceUrl": "https://www.prensa-latina.cu/2025/10/25/voz-solidaria-desde-zimbabwe-con-cuba-frente-al-bloqueo-de-estados-un/",
+    "sourceUrl": "https://www.prensa-latina.cu/2025/10/26/resaltan-papel-de-mujeres-palestinas-en-la-lucha-contra-la-ocupacion/",
     "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2024%2F05%2Fsoporte-news-pl-1.jpg",
-    "permalink": "/noticias/cuba-voz-de-solidariedade-do-zimbabue-com-cuba-diante-do-bloqueio-dos-eua.html"
+    "permalink": "/noticias/cuba-destaca-se-o-papel-das-mulheres-palestinas-na-luta-contra-a-ocupacao.html"
   },
   {
     "country": "Cuba",
-    "title": "Guatemala governa com autoridade na América Central, chegando a 119 ouros",
-    "summary": "Ciudad de Guatemala, 25 out (Prensa Latina) La delegación de Guatemala manda hoy con autoridad en los XII Juegos Centroamericanos, al alcanzar 199 oros, 87 platas y 60 bronces,266 total, cuando cerró la primera semana de competencias. O post Guatemala manda",
-    "publishedAt": "2025-10-25T10:07:46.000Z",
+    "title": "Novo satélite chinês expande capacidade de observação da Terra",
+    "summary": "Xichang, China, 26 out (Prensa Latina) China lanzó hoy con éxito el satélite Gaofen-14 02 a bordo del cohete portador Larga Marcha-3B desde el Centro de Lanzamiento de Satélitesde Xichang, província de Sichuan. O posto Nuevo satélite chino amplía capacidad d",
+    "publishedAt": "2025-10-26T10:09:18.000Z",
     "sourceName": "www.prensa-latina.cu",
-    "sourceUrl": "https://www.prensa-latina.cu/2025/10/25/guatemala-manda-con-autoridad-en-centroamericanos-subio-a-119-oros/",
+    "sourceUrl": "https://www.prensa-latina.cu/2025/10/26/nuevo-satelite-chino-amplia-capacidad-de-observacion-terrestre/",
     "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2024%2F05%2Fsoporte-news-pl-1.jpg",
-    "permalink": "/noticias/cuba-guatemala-governa-com-autoridade-na-america-central-chegando-a-119-ouros.html"
+    "permalink": "/noticias/cuba-novo-satelite-chines-expande-capacidade-de-observacao-da-terra.html"
   },
   {
     "country": "Cuba",
-    "title": "Moscou responderá a novas sanções da UE",
-    "summary": "Moscú, 25 out (Prensa Latina) Rusia responderá al nuevo paquete de sanciones de la Unión Europea (UE) con medidas eficazes y contundentes, declaró hoy la portavoz del Ministerio de Asuntos Exteriores del país eslavo, María Zajárova. O post Moscú tomará medid",
-    "publishedAt": "2025-10-25T10:07:15.000Z",
+    "title": "Panamá detém equatorianos ligados a rede criminosa transnacional",
+    "summary": "Ciudad de Panamá, 26 out (Prensa Latina) Panamá desarticuló una red criminal transnacional, integrada por ciudadanos ecuatorianos, especializada en hurto agravado en comercios y con operaciones en varios países de la región, trascendió hoy. O post Panamá det",
+    "publishedAt": "2025-10-26T10:08:47.000Z",
     "sourceName": "www.prensa-latina.cu",
-    "sourceUrl": "https://www.prensa-latina.cu/2025/10/25/moscu-tomara-medidas-de-repuesta-a-las-nuevas-sanciones-de-la-ue/",
+    "sourceUrl": "https://www.prensa-latina.cu/2025/10/26/panama-detiene-a-ecuatorianos-vinculados-a-red-criminal-trasnacional/",
     "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2024%2F05%2Fsoporte-news-pl-1.jpg",
-    "permalink": "/noticias/cuba-moscou-respondera-a-novas-sancoes-da-ue.html"
+    "permalink": "/noticias/cuba-panama-detem-equatorianos-ligados-a-rede-criminosa-transnacional.html"
   },
   {
     "country": "Laos",
-    "title": "Lições aprendidas sobre o desempenho dos deveres dos parlamentares em relação à participação pública",
-    "summary": "A conferência contou com a presença de representantes da República Democrática Popular do Laos, Camboja, Tailândia, Vietnã e organizações internacionais relevantes, juntamente com funcionários do secretariado. O encontro serviu como uma plataforma para a troca de conhecimentos, experiências e melhores práticas entre",
-    "publishedAt": "2025-10-25T10:20:32.860Z",
+    "title": "Laos e líderes vietnamitas fortalecem laços durante reunião de alto nível em Hanói",
+    "summary": "O primeiro-ministro Pham Minh Chinh (R) e o secretário-geral do Partido e presidente do Laos, Thongloun Sisoulith, em Hanói, em 24 de outubro (Foto: mofa)",
+    "publishedAt": "2025-10-26T10:20:29.962Z",
     "sourceName": "kpl.gov.la",
-    "sourceUrl": "https://kpl.gov.la/EN/detail.aspx?id=95212",
-    "imageUrl": "https://images.weserv.nl/?url=kpl.gov.la%2FMedia%2FUpload%2FNews%2FHot%2F2025%2F10%2F24%2F571253381_1320772653410371_9030029830347971748_n.jpg",
-    "permalink": "/noticias/laos-licoes-aprendidas-sobre-o-desempenho-dos-deveres-dos-parlamentares-em-relacao-a-participacao-publica.html"
+    "sourceUrl": "https://kpl.gov.la/EN/detail.aspx?id=95217",
+    "imageUrl": "https://images.weserv.nl/?url=kpl.gov.la%2FMedia%2FUpload%2FNews%2FHot%2F2025%2F10%2F26%2F571194348_1321965843291052_3305954316623259537_n.jpg",
+    "permalink": "/noticias/laos-laos-e-lideres-vietnamitas-fortalecem-lacos-durante-reuniao-de-alto-nivel-em-hanoi.html"
   }
 ]

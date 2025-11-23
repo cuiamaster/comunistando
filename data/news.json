@@ -3,7 +3,7 @@
     "country": "China",
     "title": "Educação, taxas de saúde entre as principais preocupações",
     "summary": "China vai legislar sobre educação pré-escolar",
-    "publishedAt": "2025-11-22T10:21:33.137Z",
+    "publishedAt": "2025-11-23T10:21:31.571Z",
     "sourceName": "www.chinadaily.com.cn",
     "sourceUrl": "https://www.chinadaily.com.cn/a/201712/12/WS5a2f29d4a3108bc8c6721a30.html",
     "imageUrl": "https://images.weserv.nl/?url=www.chinadaily.com.cn%2Fimage_e%2F2020%2Flogo_chinadaily.jpg",
@@ -13,7 +13,7 @@
     "country": "China",
     "title": "Grupo internacional elogia reavivamento verde",
     "summary": "Um órgão consultivo internacional de alto nível aplaudiu os esforços da China para melhorar o meio ambiente e sugeriu uma estratégia de 15 anos contra a poluição em um projeto de relatório de recomendação na segunda-feira.",
-    "publishedAt": "2025-11-22T10:21:33.417Z",
+    "publishedAt": "2025-11-23T10:21:32.054Z",
     "sourceName": "www.chinadaily.com.cn",
     "sourceUrl": "https://www.chinadaily.com.cn/a/201712/12/WS5a2f2701a3108bc8c6721a16.html",
     "imageUrl": "https://images.weserv.nl/?url=www.chinadaily.com.cn%2Fimage_e%2F2020%2Flogo_chinadaily.jpg",
@@ -21,8 +21,28 @@
   },
   {
     "country": "Rússia",
+    "title": "Ucrânia e EUA iniciam negociações na Suíça sobre o plano de Trump para acabar com a guerra",
+    "summary": "Zelensky também estava realizando telefonemas com colegas europeus, pois prometeu trabalhar 24 horas por dia para garantir que o acordo de paz final proteja o futuro da Ucrânia.",
+    "publishedAt": "2025-11-22T16:25:43.000Z",
+    "sourceName": "www.themoscowtimes.com",
+    "sourceUrl": "https://www.themoscowtimes.com/2025/11/22/ukraine-us-to-start-talks-in-switzerland-on-trumps-plan-to-end-war-a91212",
+    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2Fa2%2F91212__a21da54e6f5130b9364159d490a396ae.jpg",
+    "permalink": "/noticias/russia-ucrania-e-eua-iniciam-negociacoes-na-suica-sobre-o-plano-de-trump-para-acabar-com-a-guerra.html"
+  },
+  {
+    "country": "Rússia",
+    "title": "Bielorrússia perdoa 31 ucranianos sob o pacto Lukashenko-Trump",
+    "summary": "Em troca, Washington suspendeu parcialmente as sanções à companhia aérea estatal da Bielorrússia, Belavia, permitindo que ela fizesse manutenção e comprasse peças para sua frota, que inclui aeronaves da Boeing.",
+    "publishedAt": "2025-11-22T10:37:00.000Z",
+    "sourceName": "www.themoscowtimes.com",
+    "sourceUrl": "https://www.themoscowtimes.com/2025/11/22/belarus-pardons-31-ukrainians-under-lukashenko-trump-pact-a91211",
+    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2F15%2F91211__155c020bc509d903e16329782455bcfd.jpg",
+    "permalink": "/noticias/russia-bielorrussia-perdoa-31-ucranianos-sob-o-pacto-lukashenko-trump.html"
+  },
+  {
+    "country": "Rússia",
     "title": "Trump diz que Zelensky 'terá que gostar' do plano de paz da Ucrânia antes do prazo de 27 de novembro",
-    "summary": "O líder dos EUA instou a Ucrânia a aceitar o plano de seu governo que visa acabar com a guerra com a Rússia cedendo território.",
+    "summary": "O líder dos EUA instou a Ucrânia a aceitar o plano de seu governo que visa acabar com a guerracom a Rússia cedendo território.",
     "publishedAt": "2025-11-22T07:39:30.000Z",
     "sourceName": "www.themoscowtimes.com",
     "sourceUrl": "https://www.themoscowtimes.com/2025/11/22/trump-says-zelensky-will-have-to-like-ukraine-peace-plan-ahead-of-nov-27-deadline-a91210",
@@ -30,63 +50,43 @@
     "permalink": "/noticias/russia-trump-diz-que-zelensky-tera-que-gostar-do-plano-de-paz-da-ucrania-antes-do-prazo-de-27-de-novembro.html"
   },
   {
-    "country": "Rússia",
-    "title": "Ucrânia corre o risco de perder dignidade ou apoio dos EUA, diz Zelensky",
-    "summary": "O presidente ucraniano disse que apresentaria \"argumentos\" e \"alternativas\" à proposta de 28 pontos elaborada pelo governo Trump.",
-    "publishedAt": "2025-11-21T16:40:03.000Z",
-    "sourceName": "www.themoscowtimes.com",
-    "sourceUrl": "https://www.themoscowtimes.com/2025/11/21/ukraine-risks-losing-dignity-or-us-support-zelensky-says-a91207",
-    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2F54%2F91207__54a6fe3d119476e12c6c4d199d377300.jpg",
-    "permalink": "/noticias/russia-ucrania-corre-o-risco-de-perder-dignidade-ou-apoio-dos-eua-diz-zelensky.html"
-  },
-  {
-    "country": "Rússia",
-    "title": "Banco Central da Rússia planeja treinamento em armas de fogo para funcionários",
-    "summary": "Uma licitação publicada esta semana mostra o banco contratando para aulas de tiro com armas automáticas em intervalos licenciados em ou perto de Moscou.",
-    "publishedAt": "2025-11-21T16:20:02.000Z",
-    "sourceName": "www.themoscowtimes.com",
-    "sourceUrl": "https://www.themoscowtimes.com/2025/11/21/russias-central-bank-plans-firearms-training-for-employees-a91206",
-    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2Ffe%2F91206__fe33695f0844e04427b7287d2352159c.jpg",
-    "permalink": "/noticias/russia-banco-central-da-russia-planeja-treinamento-em-armas-de-fogo-para-funcionarios.html"
+    "country": "Cuba",
+    "title": "Lille e Lyon procuram o quarto lugar no futebol francês",
+    "summary": "París, 23 nov (Prensa Latina) Lille y Olympique de Lyon enfrentarán hoy a Paris FC y Auxerre, respectivamente, en la continuación de la jornada 13 del fútbol francés en busca de escalar al cuarto puesto, el cual permite soñar con la Champions. O post Lille y",
+    "publishedAt": "2025-11-23T09:31:07.000Z",
+    "sourceName": "www.prensa-latina.cu",
+    "sourceUrl": "https://www.prensa-latina.cu/2025/11/23/lille-y-lyon-buscan-en-futbol-frances-la-cuarta-posicion/",
+    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2025%2F11%2FFrancia-Futbol-Lille-y-Olympique-de-Lyon-1.jpg",
+    "permalink": "/noticias/cuba-lille-e-lyon-procuram-o-quarto-lugar-no-futebol-frances.html"
   },
   {
     "country": "Cuba",
-    "title": "Manifestação em Bolonha contra os crimes de Israel em Gaza (+Fotos)",
-    "summary": "Roma, 22 nov (Prensa Latina) Miles de manifestantes protestaron contra los crímenes de Israel en Gaza, con una marcha en la norteña ciudad italiana de Bolonia, durante un partido de baloncesto entre el equipo local Virtus y el Maccabi Tel Aviv, señalan hoy rep",
-    "publishedAt": "2025-11-22T10:06:21.000Z",
+    "title": "Israel matou mais de 340 palestinos em Gaza após trégua",
+    "summary": "Ramala, 23 nov (Prensa Latina) Las tropas israelitas asesinaron a 342 palestinos e hirieron a 875 en la Franja de Gaza desde el inicio de la tregua, el 10 de octubre, denunciaronhoy las autoridades del territorio. O post Israel asesinó a más de 340 palestino",
+    "publishedAt": "2025-11-23T09:00:04.000Z",
     "sourceName": "www.prensa-latina.cu",
-    "sourceUrl": "https://www.prensa-latina.cu/2025/11/22/manifestacion-en-bolonia-contra-crimenes-de-israel-en-gaza/",
-    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2025%2F11%2FBoloPal-4-1.jpg",
-    "permalink": "/noticias/cuba-manifestacao-em-bolonha-contra-os-crimes-de-israel-em-gaza-fotos.html"
+    "sourceUrl": "https://www.prensa-latina.cu/2025/11/23/israel-asesino-a-mas-de-340-palestinos-en-gaza-tras-la-tregua/",
+    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2025%2F11%2FGaza-Danos-Ataque-Israeli-1.jpg",
+    "permalink": "/noticias/cuba-israel-matou-mais-de-340-palestinos-em-gaza-apos-tregua.html"
   },
   {
     "country": "Cuba",
-    "title": "Trabalhadores uruguaios expressam insatisfação no trabalho",
-    "summary": "Montevidéu, 22 nov (Prensa Latina) El 52 por ciento de los trabajadores uruguayos presenta hoy niveles significativos de malestar, falta de motivación, insatisfacción y estrésen su entorno laboral, según datos de un estudio divulgado aquí. O post Trabajador",
-    "publishedAt": "2025-11-22T09:42:47.000Z",
+    "title": "Israel confisca mais terras palestinas na Cisjordânia ocupada",
+    "summary": "Ramala, 23 nov (Prensa Latina) Israel confiscó más de 104 hectáreas de tierra palestina en el norte del Valle de Jordán, en la ocupada Cisjordania, denunció hoy la Comisión de Resistencia al Muro y a los Asentamientos. O pós-Israel confisca más tierra empalidece",
+    "publishedAt": "2025-11-23T08:34:01.000Z",
     "sourceName": "www.prensa-latina.cu",
-    "sourceUrl": "https://www.prensa-latina.cu/2025/11/22/trabajadores-uruguayos-manifiestan-insatisfaccion-laboral/",
-    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2024%2F05%2Fsoporte-news-pl-1.jpg",
-    "permalink": "/noticias/cuba-trabalhadores-uruguaios-expressam-insatisfacao-no-trabalho.html"
-  },
-  {
-    "country": "Cuba",
-    "title": "A primeira Cúpula do G20 em solo africano começa na África do Sul",
-    "summary": "Johannesburgo, Sudáfrica, 22 nov (Prensa Latina) Con la asistencia de decenas de jefes de Estado y Gobierno de las naciones agricicamente más poderosas del mundo, y en medio de ausencias minoritarias por su número, comienza hoy en Sudáfrica la Cumbre de Líder",
-    "publishedAt": "2025-11-22T09:41:48.000Z",
-    "sourceName": "www.prensa-latina.cu",
-    "sourceUrl": "https://www.prensa-latina.cu/2025/11/22/comienza-en-sudafrica-primera-cumbre-del-g20-en-suelo-africano/",
-    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2024%2F05%2Fsoporte-news-pl-1.jpg",
-    "permalink": "/noticias/cuba-a-primeira-cupula-do-g20-em-solo-africano-comeca-na-africa-do-sul.html"
+    "sourceUrl": "https://www.prensa-latina.cu/2025/11/23/israel-confisca-mas-tierra-palestina-en-la-ocupada-cisjordania/",
+    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2025%2F05%2FPalestina-Comision-de-Resistencia-al-Muro-1.jpg",
+    "permalink": "/noticias/cuba-israel-confisca-mais-terras-palestinas-na-cisjordania-ocupada.html"
   },
   {
     "country": "Laos",
-    "title": "Embaixador do Laos apela à mídia para fortalecer laços entre ASEAN e Coreia",
-    "summary": "(KPL)O Embaixador do Laos na República da Coreia, Songkane Luangmunithone, instou as organizações de mídia da ASEAN e da Coreia a aprofundar a cooperação para fortalecer a compreensão pública da Parceria Estratégica Abrangente ASEAN-Coreia.",
-    "publishedAt": "2025-11-22T10:21:33.966Z",
+    "title": "Laos Blockchain Fest 2025 começa com visão para um futuro digital",
+    "summary": "O Sr. Boviengkham Vongdala, Ministro da Tecnologia e Comunicações e Vice-Presidente Permanente que supervisiona a transformação digital nacional, destacou o propósito do festival de promover a adoção da tecnologia digital em toda a sociedade e fortalecer a escavação do país",
+    "publishedAt": "2025-11-23T10:21:31.036Z",
     "sourceName": "kpl.gov.la",
-    "sourceUrl": "https://kpl.gov.la/EN/detail.aspx?id=95665",
-    "imageUrl": "https://images.weserv.nl/?url=kpl.gov.la%2FMedia%2FUpload%2FNews%2FHot%2F2025%2F11%2F21%2F2%252520B.jpg",
-    "permalink": "/noticias/laos-embaixador-do-laos-apela-a-midia-para-fortalecer-lacos-entre-asean-e-coreia.html"
+    "sourceUrl": "https://kpl.gov.la/EN/detail.aspx?id=95676",
+    "imageUrl": "https://images.weserv.nl/?url=kpl.gov.la%2FMedia%2FUpload%2FNews%2FHot%2F2025%2F11%2F23%2F585903959_1347084604112509_7984869921745160662_n.jpg",
+    "permalink": "/noticias/laos-laos-blockchain-fest-2025-comeca-com-visao-para-um-futuro-digital.html"
   }
 ]

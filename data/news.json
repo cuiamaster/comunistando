@@ -3,7 +3,7 @@
     "country": "China",
     "title": "Educação, taxas de saúde entre as principais preocupações",
     "summary": "China vai legislar sobre educação pré-escolar",
-    "publishedAt": "2026-01-17T10:23:28.483Z",
+    "publishedAt": "2026-01-18T10:25:06.040Z",
     "sourceName": "www.chinadaily.com.cn",
     "sourceUrl": "https://www.chinadaily.com.cn/a/201712/12/WS5a2f29d4a3108bc8c6721a30.html",
     "imageUrl": "https://images.weserv.nl/?url=www.chinadaily.com.cn%2Fimage_e%2F2020%2Flogo_chinadaily.jpg",
@@ -13,7 +13,7 @@
     "country": "China",
     "title": "Grupo internacional elogia reavivamento verde",
     "summary": "Um órgão consultivo internacional de alto nível aplaudiu os esforços da China para melhorar o meio ambiente e sugeriu uma estratégia de 15 anos contra a poluição em um projeto de relatório de recomendação na segunda-feira.",
-    "publishedAt": "2026-01-17T10:23:28.776Z",
+    "publishedAt": "2026-01-18T10:25:06.376Z",
     "sourceName": "www.chinadaily.com.cn",
     "sourceUrl": "https://www.chinadaily.com.cn/a/201712/12/WS5a2f2701a3108bc8c6721a16.html",
     "imageUrl": "https://images.weserv.nl/?url=www.chinadaily.com.cn%2Fimage_e%2F2020%2Flogo_chinadaily.jpg",
@@ -21,8 +21,28 @@
   },
   {
     "country": "Rússia",
+    "title": "Autoridades russas culpam a Ucrânia por cortes de energia no sul ocupado",
+    "summary": "Mais de 200.000 casas na Ucrânia ocupada pela Rússia ficaram sem energia, disseram as autoridades instaladas em Moscou.",
+    "publishedAt": "2026-01-18T09:55:03.000Z",
+    "sourceName": "www.themoscowtimes.com",
+    "sourceUrl": "https://www.themoscowtimes.com/2026/01/18/russian-officials-blame-ukraine-for-power-cuts-in-occupied-south-a91708",
+    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2F54%2F91708__54cb433186f55c452300eec814a40817.jpg",
+    "permalink": "/noticias/russia-autoridades-russas-culpam-a-ucrania-por-cortes-de-energia-no-sul-ocupado.html"
+  },
+  {
+    "country": "Rússia",
+    "title": "Rússia e Ucrânia concordam com cessar-fogo localizado para reparos na usina nuclear de Zaporizhzhia",
+    "summary": "Os trabalhos de uma linha de energia de reserva, que foi danificada e desconectada como resultado da atividade militar em 2 de janeiro, devem começar \"nos próximos dias\", disse a Agência Internacional de Energia Atômica.",
+    "publishedAt": "2026-01-17T10:29:49.000Z",
+    "sourceName": "www.themoscowtimes.com",
+    "sourceUrl": "https://www.themoscowtimes.com/2026/01/17/russia-and-ukraine-agree-to-localized-ceasefire-for-repairs-at-zaporizhzhia-nuclear-plant-a91706",
+    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2Ff7%2F91706__f716843235b8daf7d3cac823c3e0bdcb.jpg",
+    "permalink": "/noticias/russia-russia-e-ucrania-concordam-com-cessar-fogo-localizado-para-reparos-na-usina-nuclear-de-zaporizhzhia.html"
+  },
+  {
+    "country": "Rússia",
     "title": "Inflação russa cai acentuadamente em 2025",
-    "summary": "Os analistas preveem que a inflação aumentará novamente no início de 2026, à medida que o aumento do imposto sobre valor agregado (IVA) entrar em vigor, contribuindo para as pressões ascendentes sobre os preços.",
+    "summary": "Os analistas preveem que a inflação volte a subir no início de 2026, à medida que o aumento do imposto sobre o valor acrescentado (IVA) entra em vigor, contribuindo parapressões de preços ascendentes.",
     "publishedAt": "2026-01-16T18:41:00.000Z",
     "sourceName": "www.themoscowtimes.com",
     "sourceUrl": "https://www.themoscowtimes.com/2026/01/16/russian-inflation-drops-sharply-in-2025-a91704",
@@ -30,53 +50,33 @@
     "permalink": "/noticias/russia-inflacao-russa-cai-acentuadamente-em-2025.html"
   },
   {
-    "country": "Rússia",
-    "title": "Novos recrutas militares da Rússia caíram em 2025, mostram números",
-    "summary": "As razões exatas para a ligeira diminuição não são claras, embora algumas regiões russas tenham reduzido o tamanho de seus bônus de inscrição militar no ano passado.",
-    "publishedAt": "2026-01-16T17:00:58.000Z",
-    "sourceName": "www.themoscowtimes.com",
-    "sourceUrl": "https://www.themoscowtimes.com/2026/01/16/russias-new-military-recruits-dipped-in-2025-figures-show-a91703",
-    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2F66%2F91703__661f5dec4a5f71298157c0f8d584e2ad.jpg",
-    "permalink": "/noticias/russia-novos-recrutas-militares-da-russia-cairam-em-2025-mostram-numeros.html"
-  },
-  {
-    "country": "Rússia",
-    "title": "A Rússia começa a estrangular o Telegram devido a disputas de moderação de conteúdo",
-    "summary": "Um legislador sênior acusou o aplicativo de mensagens de não cumprir prontamente os pedidos de remoção de conteúdo sinalizado.",
-    "publishedAt": "2026-01-16T16:24:36.000Z",
-    "sourceName": "www.themoscowtimes.com",
-    "sourceUrl": "https://www.themoscowtimes.com/2026/01/16/russia-begins-throttling-telegram-over-content-moderation-disputes-a91700",
-    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2Fa7%2F91700__a7b452dc8082a059807815de1671bf38.jpg",
-    "permalink": "/noticias/russia-a-russia-comeca-a-estrangular-o-telegram-devido-a-disputas-de-moderacao-de-conteudo.html"
+    "country": "Cuba",
+    "title": "Ataques israelenses causam grave crise hídrica na cidade de Gaza",
+    "summary": "Ramala, 18 ene (Prensa Latina) La grave crisis de escasez de agua que afecta a grandes áreas de la ciudad de Gaza se debe a daños en las líneas de transmisión como resultado de los recientes ataques israelíes, denunció hoy la Municipalidad. O post Ataques é",
+    "publishedAt": "2026-01-18T09:38:10.000Z",
+    "sourceName": "www.prensa-latina.cu",
+    "sourceUrl": "https://www.prensa-latina.cu/2026/01/18/ataques-israelies-provocan-grave-crisis-hidrica-en-la-ciudad-de-gaza/",
+    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2025%2F09%2Fejercito-israel-1.jpg",
+    "permalink": "/noticias/cuba-ataques-israelenses-causam-grave-crise-hidrica-na-cidade-de-gaza.html"
   },
   {
     "country": "Cuba",
-    "title": "Líder alemão pede diálogo com a Rússia pela paz na Ucrânia",
-    "summary": "Berlín, 17 ene (Prensa Latina) El copresidente del partido Alternativa para Alemania (AfD), Tino Chrupalla, instó hoy al gobierno federal a dialogar con Rusia para frenar la \"espiral de escalada\" en Ucrania, según declaró al periódico Welt am Sonntag.",
-    "publishedAt": "2026-01-17T10:20:40.000Z",
+    "title": "Rússia e Arábia Saudita planejam expandir seus serviços aéreos",
+    "summary": "Moscú, 18 ene (Prensa Latina) Rusia y Arabia Saudita trabajan por ampliar sus servicios aéreos en 2026, aseguró hoy el ministro de Transporte del país euroasiático, AndréiNikitin, en entrevista a la agencia de noticias TASS. O posto Rusia y Arabia Saudita pl",
+    "publishedAt": "2026-01-18T09:37:11.000Z",
     "sourceName": "www.prensa-latina.cu",
-    "sourceUrl": "https://www.prensa-latina.cu/2026/01/17/lider-aleman-urge-dialogo-con-rusia-para-paz-en-ucrania/",
-    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2024%2F05%2Fsoporte-news-pl-1.jpg",
-    "permalink": "/noticias/cuba-lider-alemao-pede-dialogo-com-a-russia-pela-paz-na-ucrania.html"
+    "sourceUrl": "https://www.prensa-latina.cu/2026/01/18/rusia-y-arabia-saudita-planean-ampliar-sus-servicios-aereos/",
+    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2026%2F01%2Frusia-Andrei-Nikitin-1.jpg",
+    "permalink": "/noticias/cuba-russia-e-arabia-saudita-planejam-expandir-seus-servicos-aereos.html"
   },
   {
     "country": "Cuba",
-    "title": "Comemore o Dia Mundial da Pizza na Itália",
-    "summary": "Roma, 17 ene (Prensa Latina) Con un amplio programa de eventos se celebra hoy en Italia el Día Mundial de la Pizza, fecha en que se rinde homenaje a uno de los platos másapreciados en el mundo, símbolo de tradición y creatividad culinaria. O post Celebran e",
-    "publishedAt": "2026-01-17T10:02:10.000Z",
+    "title": "A popularidade do presidente francês atinge o fundo do poço",
+    "summary": "París, 18 ene (Prensa Latina) La popularidad del presidente francés, Emmanuel Macron, toca fondo en en enero con apenas un 18 por ciento de aceptación, refleja hoy una encuesta. O post Toca fondo popularidad del presidente francés apareceu pela primeira vez no Noticias Pre",
+    "publishedAt": "2026-01-18T09:36:39.000Z",
     "sourceName": "www.prensa-latina.cu",
-    "sourceUrl": "https://www.prensa-latina.cu/2026/01/17/celebran-en-italia-el-dia-mundial-de-la-pizza/",
-    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2024%2F05%2Fsoporte-news-pl-1.jpg",
-    "permalink": "/noticias/cuba-comemore-o-dia-mundial-da-pizza-na-italia.html"
-  },
-  {
-    "country": "Cuba",
-    "title": "China bate recorde mundial de consumo anual de eletricidade",
-    "summary": "Pequim, 17 ene (Prensa Latina) El consumo total de electricidad de China superó por primera vez los 10 billones de kilovatios/hora en 2025, al alcanzar 10,4 billones, con un crecimiento interanual del cinco por ciento, informó hoy una fuente oficial.",
-    "publishedAt": "2026-01-17T08:58:01.000Z",
-    "sourceName": "www.prensa-latina.cu",
-    "sourceUrl": "https://www.prensa-latina.cu/2026/01/17/china-registra-record-mundial-en-consumo-anual-de-electricidad/",
-    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2026%2F01%2FChina-Electricidad-1.jpg",
-    "permalink": "/noticias/cuba-china-bate-recorde-mundial-de-consumo-anual-de-eletricidade.html"
+    "sourceUrl": "https://www.prensa-latina.cu/2026/01/18/toca-fondo-popularidad-del-presidente-frances/",
+    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2025%2F10%2FMacron-en-crisis-1.jpg",
+    "permalink": "/noticias/cuba-a-popularidade-do-presidente-frances-atinge-o-fundo-do-poco.html"
   }
 ]

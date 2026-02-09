@@ -3,7 +3,7 @@
     "country": "China",
     "title": "Educação, taxas de saúde entre as principais preocupações",
     "summary": "China vai legislar sobre educação pré-escolar",
-    "publishedAt": "2026-02-08T10:31:13.398Z",
+    "publishedAt": "2026-02-09T10:57:42.712Z",
     "sourceName": "www.chinadaily.com.cn",
     "sourceUrl": "https://www.chinadaily.com.cn/a/201712/12/WS5a2f29d4a3108bc8c6721a30.html",
     "imageUrl": "https://images.weserv.nl/?url=www.chinadaily.com.cn%2Fimage_e%2F2020%2Flogo_chinadaily.jpg",
@@ -13,7 +13,7 @@
     "country": "China",
     "title": "Grupo internacional elogia reavivamento verde",
     "summary": "Um órgão consultivo internacional de alto nível aplaudiu os esforços da China para melhorar o meio ambiente e sugeriu uma estratégia de 15 anos contra a poluição em um projeto de relatório de recomendação na segunda-feira.",
-    "publishedAt": "2026-02-08T10:31:13.723Z",
+    "publishedAt": "2026-02-09T10:57:43.306Z",
     "sourceName": "www.chinadaily.com.cn",
     "sourceUrl": "https://www.chinadaily.com.cn/a/201712/12/WS5a2f2701a3108bc8c6721a16.html",
     "imageUrl": "https://images.weserv.nl/?url=www.chinadaily.com.cn%2Fimage_e%2F2020%2Flogo_chinadaily.jpg",
@@ -21,13 +21,23 @@
   },
   {
     "country": "Rússia",
-    "title": "Homem suspeito de atirar em general do GRU é preso em Dubai, diz FSB",
-    "summary": "Um suposto cúmplice foi preso em Moscou, enquanto outro fugiu para a Ucrânia, disse o serviço de segurança FSB.",
-    "publishedAt": "2026-02-08T10:01:32.000Z",
+    "title": "Estudantes indianos feridos em ataque com faca na universidade em Bashkortostan",
+    "summary": "Funcionários do Consulado Geral da Índia em Kazan foram enviados para ajudar as vítimas após o ataque com faca neste fim de semana.",
+    "publishedAt": "2026-02-09T09:54:00.000Z",
     "sourceName": "www.themoscowtimes.com",
-    "sourceUrl": "https://www.themoscowtimes.com/2026/02/08/man-suspected-of-shooting-gru-general-arrested-in-dubai-fsb-says-a91890",
+    "sourceUrl": "https://www.themoscowtimes.com/2026/02/09/indian-students-injured-in-knife-attack-at-university-in-bashkortostan-a91891",
+    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2Fd0%2F91891__d0862a6afb0339663c2ab251869da373.jpg",
+    "permalink": "/noticias/russia-estudantes-indianos-feridos-em-ataque-com-faca-na-universidade-em-bashkortostan.html"
+  },
+  {
+    "country": "Rússia",
+    "title": "Serviços de segurança ucranianos estavam por trás do tiroteio do general GRU, diz FSB",
+    "summary": "A polícia russa disse que dois homens foram presos em conexão com a tentativa de assassinato do tenente-general Vladimir Alexeyev.",
+    "publishedAt": "2026-02-09T06:50:00.000Z",
+    "sourceName": "www.themoscowtimes.com",
+    "sourceUrl": "https://www.themoscowtimes.com/2026/02/09/ukrainian-security-services-were-behind-shooting-of-gru-general-fsb-says-a91890",
     "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2F7f%2F91890__7f56ce7b13884412d40ab811f7863ab7.jpg",
-    "permalink": "/noticias/russia-homem-suspeito-de-atirar-em-general-do-gru-e-preso-em-dubai-diz-fsb.html"
+    "permalink": "/noticias/russia-servicos-de-seguranca-ucranianos-estavam-por-tras-do-tiroteio-do-general-gru-diz-fsb.html"
   },
   {
     "country": "Rússia",
@@ -40,53 +50,43 @@
     "permalink": "/noticias/russia-eua-pressionam-ucrania-e-russia-para-acabar-com-a-guerra-ate-junho-zelensky.html"
   },
   {
-    "country": "Rússia",
-    "title": "Rússia atinge rede elétrica da Ucrânia com ‘ataque massivo’, diz operadora",
-    "summary": "Kiev solicitou assistência de emergência à Polónia depois de a Rússia ter atingido duas centrais elétricas no oeste da Ucrânia.",
-    "publishedAt": "2026-02-07T07:45:29.000Z",
-    "sourceName": "www.themoscowtimes.com",
-    "sourceUrl": "https://www.themoscowtimes.com/2026/02/07/russia-hits-ukraine-power-grid-with-massive-attack-operator-says-a91888",
-    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2F58%2F91888__58079b7692b577ca97d45845fd9ffec4.jpg",
-    "permalink": "/noticias/russia-russia-atinge-rede-eletrica-da-ucrania-com-ataque-massivo-diz-operadora.html"
+    "country": "Cuba",
+    "title": "Segurança russa revela tentativas ocidentais de desestabilizar a Bielorrússia",
+    "summary": "Moscú, 9 fev (Prensa Latina) El Servicio de Inteligencia Exterior de Rusia reveló hoy que desde Occidente tienen la intención de volver a desestabilizar la situación en Belarús en aras de conseguir un cambio de orden constitucional. O post Seguridad rusa rev",
+    "publishedAt": "2026-02-09T10:46:48.000Z",
+    "sourceName": "www.prensa-latina.cu",
+    "sourceUrl": "https://www.prensa-latina.cu/2026/02/09/seguridad-rusa-revela-intentos-occidentales-de-desestabilizar-belarus/",
+    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2024%2F05%2Fsoporte-news-pl-1.jpg",
+    "permalink": "/noticias/cuba-seguranca-russa-revela-tentativas-ocidentais-de-desestabilizar-a-bielorrussia.html"
   },
   {
     "country": "Cuba",
-    "title": "UE vai tentar livrar-se de Orbán, diz eurodeputado",
-    "summary": "Luxemburgo, 8 fev (Prensa Latina) El eurodiputado luxemburgués Fernand Kartheiser declaró hoy que la Unión Europea (UE) intentará eliminar al primer ministro húngaro, Viktor Orbán, ante los comicios en ese país, destacó el diario L 'essentiel. O post UE inten",
-    "publishedAt": "2026-02-08T10:18:02.000Z",
+    "title": "Uruguai por promover laços econômicos com o Reino Unido",
+    "summary": "Montevidéu, 6 fev (Prensa Latina) El ministro de Economía y Finanzas de Uruguay, Gabriel Oddone, inicia hoy una visita al Reino Unido para fortalecer vínculos con el paíseuropeo. O post Uruguai por promover vínculos económicos con Reino Unido apareceu pela primeira vez",
+    "publishedAt": "2026-02-09T10:45:17.000Z",
     "sourceName": "www.prensa-latina.cu",
-    "sourceUrl": "https://www.prensa-latina.cu/2026/02/08/ue-intentara-deshacerse-de-orban-segun-eurodiputado/",
-    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2024%2F11%2FViktor-Orban-1.jpg",
-    "permalink": "/noticias/cuba-ue-vai-tentar-livrar-se-de-orban-diz-eurodeputado.html"
+    "sourceUrl": "https://www.prensa-latina.cu/2026/02/09/uruguay-por-promover-vinculos-economicos-con-reino-unido/",
+    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2026%2F02%2FGabriel-Oddone-1.jpg",
+    "permalink": "/noticias/cuba-uruguai-por-promover-lacos-economicos-com-o-reino-unido.html"
   },
   {
     "country": "Cuba",
-    "title": "Preso pelo recente ataque ao chefe militar da Rússia",
-    "summary": "Moscú, 8 fev (Prensa Latina) El Servicio Federal de Seguridad Rusia (FSB por sus siglas en ruso) anunció hoy la detención del autor del atentado perpetrado el 6 de febrerocontra el teniente general del Ministerio de Defensa Vladimir Alekséyev. O posto Deteni",
-    "publishedAt": "2026-02-08T10:17:32.000Z",
+    "title": "Naufrágio do século XVII descoberto na maré baixa em Estocolmo",
+    "summary": "Copenhague, 9 fev (Prensa Latina) La bajamar récord en el mar Báltico dejó al descubierto hoy un buque del siglo XVII frente a la capital sueca, revelando un patrimonio histórico amenazado por la crisis climática. O post Descubren en Estocolmo pecio del sigl",
+    "publishedAt": "2026-02-09T10:44:16.000Z",
     "sourceName": "www.prensa-latina.cu",
-    "sourceUrl": "https://www.prensa-latina.cu/2026/02/08/detenido-autor-del-reciente-atentado-contra-jefe-militar-de-rusia/",
-    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2024%2F07%2FRusia-Servicio-Federal-de-Seguridad-FSB-1.jpg",
-    "permalink": "/noticias/cuba-preso-pelo-recente-ataque-ao-chefe-militar-da-russia.html"
-  },
-  {
-    "country": "Cuba",
-    "title": "Denuncie a campanha de colonização israelense na Cisjordânia",
-    "summary": "Ramala, 8 fev (Prensa Latina) Israel aceleró la colonización de la ocupada Cisjordania como parte de una estrategia para imponer hechos consumados y transformar asentamientos aislados en enormes bloques, denunció hoy un experto palestino. O post Denuncian ca",
-    "publishedAt": "2026-02-08T10:16:31.000Z",
-    "sourceName": "www.prensa-latina.cu",
-    "sourceUrl": "https://www.prensa-latina.cu/2026/02/08/denuncian-campana-de-colonizacion-israeli-en-cisjordania/",
-    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2025%2F08%2Fpalestina-colonia-1-2.jpg",
-    "permalink": "/noticias/cuba-denuncie-a-campanha-de-colonizacao-israelense-na-cisjordania.html"
+    "sourceUrl": "https://www.prensa-latina.cu/2026/02/09/descubren-en-estocolmo-pecio-del-siglo-xvii-por-baja-marea/",
+    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2024%2F05%2Fsoporte-news-pl-1.jpg",
+    "permalink": "/noticias/cuba-naufragio-do-seculo-xvii-descoberto-na-mare-baixa-em-estocolmo.html"
   },
   {
     "country": "Laos",
-    "title": "Presidente Thongloun Sisoulith chega a Phnom Penh para visita de Estado ao Camboja",
-    "summary": "A delegação do Laos foi recebida pelo Conselheiro Sênior de Sua Majestade, Sr. Sok Soken, Ministro da Inspeção do Reino do Camboja (Ministro Sênior), Sr. Bouakham Phomvongsay, Embaixador da RDP do Laos no Reino do Camboja, e funcionários relevantes de ambos",
-    "publishedAt": "2026-02-08T10:31:13.631Z",
+    "title": "Presidente Thongloun visita Camboja",
+    "summary": "Uma cerimônia oficial de boas-vindas foi realizada no Palácio Real em 7 de fevereiro, seguida de uma visita de cortesia a Samdech Akka Moha Sena Padei Techo Hun Sen, agindo em nome do Rei. O Presidente Thongloun expressou apreço pela calorosa recepção e transmitiu",
+    "publishedAt": "2026-02-09T10:57:37.510Z",
     "sourceName": "kpl.gov.la",
-    "sourceUrl": "https://kpl.gov.la/EN/detail.aspx?id=96816",
-    "imageUrl": "https://images.weserv.nl/?url=kpl.gov.la%2FMedia%2FUpload%2FNews%2FHot%2F2026%2F02%2F06%2FFB_IMG_1770371099998.jpg",
-    "permalink": "/noticias/laos-presidente-thongloun-sisoulith-chega-a-phnom-penh-para-visita-de-estado-ao-camboja.html"
+    "sourceUrl": "https://kpl.gov.la/EN/detail.aspx?id=96832",
+    "imageUrl": "https://images.weserv.nl/?url=kpl.gov.la%2FMedia%2FUpload%2FNews%2FHot%2F2026%2F02%2F09%2Fthongloun%252520in%252520cambodia%2525202.jpg",
+    "permalink": "/noticias/laos-presidente-thongloun-visita-camboja.html"
   }
 ]

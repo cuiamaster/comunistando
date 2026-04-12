@@ -3,7 +3,7 @@
     "country": "China",
     "title": "Educação, taxas de saúde entre as principais preocupações",
     "summary": "China vai legislar sobre educação pré-escolar",
-    "publishedAt": "2026-04-11T10:38:06.104Z",
+    "publishedAt": "2026-04-12T10:41:24.997Z",
     "sourceName": "www.chinadaily.com.cn",
     "sourceUrl": "https://www.chinadaily.com.cn/a/201712/12/WS5a2f29d4a3108bc8c6721a30.html",
     "imageUrl": "https://images.weserv.nl/?url=www.chinadaily.com.cn%2Fimage_e%2F2020%2Flogo_chinadaily.jpg",
@@ -13,11 +13,31 @@
     "country": "China",
     "title": "Grupo internacional elogia reavivamento verde",
     "summary": "Um órgão consultivo internacional de alto nível aplaudiu os esforços da China para melhorar o meio ambiente e sugeriu uma estratégia de 15 anos contra a poluição em um projeto de relatório de recomendação na segunda-feira.",
-    "publishedAt": "2026-04-11T10:38:06.504Z",
+    "publishedAt": "2026-04-12T10:41:25.456Z",
     "sourceName": "www.chinadaily.com.cn",
     "sourceUrl": "https://www.chinadaily.com.cn/a/201712/12/WS5a2f2701a3108bc8c6721a16.html",
     "imageUrl": "https://images.weserv.nl/?url=www.chinadaily.com.cn%2Fimage_e%2F2020%2Flogo_chinadaily.jpg",
     "permalink": "/noticias/china-grupo-internacional-elogia-reavivamento-verde.html"
+  },
+  {
+    "country": "Rússia",
+    "title": "Ucrânia e Rússia trocam acusações sobre violações da trégua de Páscoa",
+    "summary": "Os militares da Ucrânia disseram que registraram quase 2.300 violações, enquanto os da Rússia disseram que quase 2.000 violações ocorreram até a manhã de domingo.",
+    "publishedAt": "2026-04-12T08:00:00.000Z",
+    "sourceName": "www.themoscowtimes.com",
+    "sourceUrl": "https://www.themoscowtimes.com/2026/04/12/ukraine-russia-exchange-accusations-over-easter-truce-violations-a92477",
+    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2F89%2F92477__892cc228b45670f75bdc320794812f87.jpg",
+    "permalink": "/noticias/russia-ucrania-e-russia-trocam-acusacoes-sobre-violacoes-da-tregua-de-pascoa.html"
+  },
+  {
+    "country": "Rússia",
+    "title": "Rússia e Ucrânia trocam centenas de prisioneiros antes da trégua da Páscoa",
+    "summary": "O Ministério da Defesa da Rússia disse que ambos os lados trocaram 175 militares em um acordo facilitado pelos Emirados Árabes Unidos.",
+    "publishedAt": "2026-04-11T12:14:05.000Z",
+    "sourceName": "www.themoscowtimes.com",
+    "sourceUrl": "https://www.themoscowtimes.com/2026/04/11/russia-and-ukraine-swap-hundreds-of-prisoners-ahead-of-easter-truce-a92476",
+    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2F31%2F92476__31d7a00bc6aa33b6fcb8f98da5b88feb.jpg",
+    "permalink": "/noticias/russia-russia-e-ucrania-trocam-centenas-de-prisioneiros-antes-da-tregua-da-pascoa.html"
   },
   {
     "country": "Rússia",
@@ -30,63 +50,43 @@
     "permalink": "/noticias/russia-russia-designa-universidade-de-stanford-como-indesejavel.html"
   },
   {
-    "country": "Rússia",
-    "title": "Ex-vice-ministro da Defesa Pavel Popov é condenado a 19 anos de prisão por corrupção",
-    "summary": "A prisão de Popov em agosto de 2024 ocorreu em meio a um abalo mais amplo nas forças armadas que viu a demissão de Sergei Shoigu como ministro da Defesa e investigações criminais contra altos escalões.",
-    "publishedAt": "2026-04-10T14:49:58.000Z",
-    "sourceName": "www.themoscowtimes.com",
-    "sourceUrl": "https://www.themoscowtimes.com/2026/04/10/ex-deputy-defense-minister-pavel-popov-jailed-19-years-on-corruption-charges-a92473",
-    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2Fb1%2F92473__b110a9acc6e0a23d86a437c4c3b48e0c.jpg",
-    "permalink": "/noticias/russia-ex-vice-ministro-da-defesa-pavel-popov-e-condenado-a-19-anos-de-prisao-por-corrupcao.html"
-  },
-  {
-    "country": "Rússia",
-    "title": "Enviado econômico do Kremlin chega aos Estados Unidos para conversas",
-    "summary": "O porta-voz do Kremlin, Dmitry Peskov, disse que Kirill Dmitriev éliderando uma delegação focada estritamente em assuntos econômicos.",
-    "publishedAt": "2026-04-10T13:50:03.000Z",
-    "sourceName": "www.themoscowtimes.com",
-    "sourceUrl": "https://www.themoscowtimes.com/2026/04/10/kremlin-economic-envoy-arrives-in-united-states-for-talks-a92472",
-    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2F7d%2F92472__7de794bcacbe8030e5af9a7aaee576c7.jpg",
-    "permalink": "/noticias/russia-enviado-economico-do-kremlin-chega-aos-estados-unidos-para-conversas.html"
+    "country": "Cuba",
+    "title": "Sambistas russos conquistam 32 medalhas em um dia na Copa do Mundo",
+    "summary": "Moscú, 12 abr (Prensa Latina) Los luchadores rusos de sambo ganaron 32 medallas en el primer día de la Copa del Mundo en Ereván, Armenia, informó hoy la Federación Internacional de ese deporte (FIAS). O post Sambistas rusos ganan 32 medallas en un día en la ",
+    "publishedAt": "2026-04-12T09:42:54.000Z",
+    "sourceName": "www.prensa-latina.cu",
+    "sourceUrl": "https://www.prensa-latina.cu/2026/04/12/sambistas-rusos-ganan-32-medallas-en-un-dia-en-la-copa-del-mundo/",
+    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2026%2F04%2FSambo-1.jpg",
+    "permalink": "/noticias/cuba-sambistas-russos-conquistam-32-medalhas-em-um-dia-na-copa-do-mundo.html"
   },
   {
     "country": "Cuba",
-    "title": "Sanchez na China para a quarta visita e contato mais próximo com Pequim",
-    "summary": "Pequim, 11 abr (Prensa Latina) El jefe del Gobierno español, Pedro Sánchez, llegó hoy a esta capital para su cuarta visita al gigante asiático en poco más de tres años, durante la cual se reunirá nuevamente con su homólogo anfitrión Xi Jinping.",
-    "publishedAt": "2026-04-11T09:49:23.000Z",
+    "title": "Falta de combustível devido ao bloqueio israelense afeta a saúde em Gaza",
+    "summary": "Ramala, 12 abr (Prensa Latina) Uno de los generadores principales del Complejo Médico Nasser, en el sur de la Franja de Gaza, está apagado pela falta de combustível, comoresultado del bloqueo impuesto por Israel a ese territorio palestino. O post Falt",
+    "publishedAt": "2026-04-12T09:07:20.000Z",
     "sourceName": "www.prensa-latina.cu",
-    "sourceUrl": "https://www.prensa-latina.cu/2026/04/11/sanchez-en-china-para-cuarta-visita-y-mayor-acercamiento-con-beijing/",
-    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2026%2F04%2FPedro-Sanchez-en-China1-1.jpg",
-    "permalink": "/noticias/cuba-sanchez-na-china-para-a-quarta-visita-e-contato-mais-proximo-com-pequim.html"
+    "sourceUrl": "https://www.prensa-latina.cu/2026/04/12/falta-de-combustible-por-bloqueo-israeli-impacta-la-salud-en-gaza/",
+    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2026%2F04%2FGaza-1-2-3-1-2.jpg",
+    "permalink": "/noticias/cuba-falta-de-combustivel-devido-ao-bloqueio-israelense-afeta-a-saude-em-gaza.html"
   },
   {
     "country": "Cuba",
-    "title": "Delegações do Irã e dos EUA no Paquistão para negociações",
-    "summary": "Islamabad, 11 abr (Prensa Latina) La delegación de Estados Unidos, encabezada por el vicepresidente J.D. Vance, llegó hoy aquí para las negociaciones sobre la guerra en MedioOriente, 12 horas después del arribo de la representación de alto nivel de Irán. ",
-    "publishedAt": "2026-04-11T09:48:23.000Z",
+    "title": "O futsal do Vietnã precisa de uma reforma fundamental, digamos",
+    "summary": "Hanói, 12 abr (Prensa Latina) La reciente derrota en semifinales en el Campeonato del Sudeste Asiático 2026 dejó en claro que el fútbol sala de Vietnam está necesitado hoy de una reforma fundamental, según la opinión de especialistas locales. O post Fútbol s",
+    "publishedAt": "2026-04-12T09:03:20.000Z",
     "sourceName": "www.prensa-latina.cu",
-    "sourceUrl": "https://www.prensa-latina.cu/2026/04/11/delegaciones-de-iran-y-eeuu-en-pakistan-para-negociaciones/",
-    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2026%2F04%2FIran-estados-unidos-en-pakistan-1.jpg",
-    "permalink": "/noticias/cuba-delegacoes-do-ira-e-dos-eua-no-paquistao-para-negociacoes.html"
-  },
-  {
-    "country": "Cuba",
-    "title": "União Africana felicita presidente reeleito do Djibuti",
-    "summary": "Addis Abeba, 11 abr (Prensa Latina) El presidente de la Comisión de la Unión Africana, Mahmoud Ali Youssouf, felicitó hoy a Ismail Omar Guelleh por su reelección como jefe de Estado de Djibouti para un sexto mandato. O posto Unión Africana felicitó a presiden",
-    "publishedAt": "2026-04-11T09:05:49.000Z",
-    "sourceName": "www.prensa-latina.cu",
-    "sourceUrl": "https://www.prensa-latina.cu/2026/04/11/union-africana-felicito-a-presidente-reelecto-de-djibouti/",
-    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2025%2F06%2FUnion-Africana-1.jpg",
-    "permalink": "/noticias/cuba-uniao-africana-felicita-presidente-reeleito-do-djibuti.html"
+    "sourceUrl": "https://www.prensa-latina.cu/2026/04/12/futbol-sala-de-vietnam-necesitado-de-reforma-fundamental-opinan/",
+    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2026%2F04%2FVietnam-Futsal-1-1.jpg",
+    "permalink": "/noticias/cuba-o-futsal-do-vietna-precisa-de-uma-reforma-fundamental-digamos.html"
   },
   {
     "country": "Laos",
-    "title": "Bunpimay tradicional de Ano Novo do Laos comemorado em Hanói",
-    "summary": "(KPL/VNA) A Embaixada do Laos no Vietnã, em 8 de abril, realizou uma cerimônia em Hanói para celebrar o tradicional festival de Ano Novo do Laos, Bunpimay.",
-    "publishedAt": "2026-04-11T10:38:06.148Z",
+    "title": "Laos assina acordo para promover veículos elétricos em meio ao aumento dos preços dos combustíveis",
+    "summary": "(KPL) O governo do Laos assinou um memorando de entendimento destinado a promover o uso nacional de veículos elétricos, enquanto as autoridades trabalham para reduzir o impacto do aumento dos preços globais dos combustíveis e fortalecer a transição do país para a energia limpa.",
+    "publishedAt": "2026-04-12T10:41:25.326Z",
     "sourceName": "kpl.gov.la",
-    "sourceUrl": "https://kpl.gov.la/EN/detail.aspx?id=97776",
-    "imageUrl": "https://images.weserv.nl/?url=kpl.gov.la%2FMedia%2FUpload%2FNews%2FHot%2F2026%2F04%2F11%2Fmrs%252520Ernthavanh.jpeg",
-    "permalink": "/noticias/laos-bunpimay-tradicional-de-ano-novo-do-laos-comemorado-em-hanoi.html"
+    "sourceUrl": "https://kpl.gov.la/EN/detail.aspx?id=97777",
+    "imageUrl": "https://images.weserv.nl/?url=kpl.gov.la%2FMedia%2FUpload%2FNews%2FHot%2F2026%2F04%2F11%2FEV%252520Lao%252520Signing.jpg",
+    "permalink": "/noticias/laos-laos-assina-acordo-para-promover-veiculos-eletricos-em-meio-ao-aumento-dos-precos-dos-combustiveis.html"
   }
 ]

@@ -3,7 +3,7 @@
     "country": "China",
     "title": "Educação, taxas de saúde entre as principais preocupações",
     "summary": "China vai legislar sobre educação pré-escolar",
-    "publishedAt": "2026-06-19T13:35:47.556Z",
+    "publishedAt": "2026-06-20T11:58:13.022Z",
     "sourceName": "www.chinadaily.com.cn",
     "sourceUrl": "https://www.chinadaily.com.cn/a/201712/12/WS5a2f29d4a3108bc8c6721a30.html",
     "imageUrl": "https://images.weserv.nl/?url=www.chinadaily.com.cn%2Fimage_e%2F2020%2Flogo_chinadaily.jpg",
@@ -13,7 +13,7 @@
     "country": "China",
     "title": "Grupo internacional elogia reavivamento verde",
     "summary": "Um órgão consultivo internacional de alto nível aplaudiu os esforços da China para melhorar o meio ambiente e sugeriu uma estratégia de 15 anos contra a poluição em um projeto de relatório de recomendação na segunda-feira.",
-    "publishedAt": "2026-06-19T13:35:48.065Z",
+    "publishedAt": "2026-06-20T11:58:13.471Z",
     "sourceName": "www.chinadaily.com.cn",
     "sourceUrl": "https://www.chinadaily.com.cn/a/201712/12/WS5a2f2701a3108bc8c6721a16.html",
     "imageUrl": "https://images.weserv.nl/?url=www.chinadaily.com.cn%2Fimage_e%2F2020%2Flogo_chinadaily.jpg",
@@ -21,8 +21,28 @@
   },
   {
     "country": "Rússia",
+    "title": "A Rússia passou de anfitriã da Copa do Mundo a pária do futebol. Ou será que foi?",
+    "summary": "À medida que a Rússia perde outra Copa do Mundo, seus jogadores continuam a encontrar oportunidades no exterior e as autoridades discutem silenciosamente um retorno ao futebol internacional.",
+    "publishedAt": "2026-06-19T16:21:00.000Z",
+    "sourceName": "www.themoscowtimes.com",
+    "sourceUrl": "https://www.themoscowtimes.com/2026/06/19/russia-went-from-world-cup-host-to-football-outcast-or-did-it-a93058",
+    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2F0c%2F93058__0c7e9a7d03c674706dd16dcf5debaf29.jpg",
+    "permalink": "/noticias/russia-a-russia-passou-de-anfitria-da-copa-do-mundo-a-paria-do-futebol-ou-sera-que-foi.html"
+  },
+  {
+    "country": "Rússia",
+    "title": "Empresário checheno compra participação em mineradora de ouro em leilão final",
+    "summary": "Uma empresa de construção de propriedade do bilionário checheno Ruslan Baisarov foi declarada vencedora de um quarto e último leilão do governo para vender o Grupo de Empresas Yuzhuralzoloto.",
+    "publishedAt": "2026-06-19T14:05:55.000Z",
+    "sourceName": "www.themoscowtimes.com",
+    "sourceUrl": "https://www.themoscowtimes.com/2026/06/19/chechen-businessman-buys-stake-in-gold-mining-company-at-final-auction-a93060",
+    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2F4d%2F93060__4dc6f921ade739c8d17b66a57c81370d.jpg",
+    "permalink": "/noticias/russia-empresario-checheno-compra-participacao-em-mineradora-de-ouro-em-leilao-final.html"
+  },
+  {
+    "country": "Rússia",
     "title": "Kremlin elogia desempenho das defesas aéreas russas após ataque recorde de drone em Moscou",
-    "summary": "Vários relatórios sugeriram que os mísseis de defesa aérea perdidos podem ter sido parcialmente responsáveis pela destruição de uma refinaria de petróleo perto de Moscou.",
+    "summary": "Vários relatórios sugeriram que os mísseis de defesa aérea perdidos podem ter sidoparcialmente responsável pela destruição em uma refinaria de petróleo perto de Moscou.",
     "publishedAt": "2026-06-19T13:23:00.000Z",
     "sourceName": "www.themoscowtimes.com",
     "sourceUrl": "https://www.themoscowtimes.com/2026/06/19/kremlin-praises-performance-of-russian-air-defenses-after-record-drone-attack-on-moscow-a93057",
@@ -30,63 +50,43 @@
     "permalink": "/noticias/russia-kremlin-elogia-desempenho-das-defesas-aereas-russas-apos-ataque-recorde-de-drone-em-moscou.html"
   },
   {
-    "country": "Rússia",
-    "title": "Banco Central da Rússia reduz taxa básica de juros para 14,25%",
-    "summary": "O corte sinaliza que os formuladores de políticas continuam cautelosos na redução da taxa básica, já que os analistas esperavam um corte maior, de 50 pontos-base.",
-    "publishedAt": "2026-06-19T11:55:00.000Z",
-    "sourceName": "www.themoscowtimes.com",
-    "sourceUrl": "https://www.themoscowtimes.com/2026/06/19/russian-central-bank-slashes-key-rate-to-1425-a93053",
-    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2F02%2F93053__023ebcfd3444e1cdc7aeb1421510f237.jpg",
-    "permalink": "/noticias/russia-banco-central-da-russia-reduz-taxa-basica-de-juros-para-14-25.html"
-  },
-  {
-    "country": "Rússia",
-    "title": "Autoridades de Penza mobilizam à força homens para o serviço militar – Relatórios",
-    "summary": "Uma ONG que ajuda os homens russos a evitar o serviço militar disse que foi contactada por várias pessoas na cidade de Penza e cidades próximas quedescreveu os homens sendo \"presos indiscriminadamente\".",
-    "publishedAt": "2026-06-19T10:50:00.000Z",
-    "sourceName": "www.themoscowtimes.com",
-    "sourceUrl": "https://www.themoscowtimes.com/2026/06/19/penza-authorities-forcibly-mobilizing-men-into-military-reports-a93055",
-    "imageUrl": "https://images.weserv.nl/?url=static.themoscowtimes.com%2Fimage%2Fog%2F3c%2F93055__3c2ddf2682d61814f0b7a96ca8b9e84f.jpg",
-    "permalink": "/noticias/russia-autoridades-de-penza-mobilizam-a-forca-homens-para-o-servico-militar-relatorios.html"
+    "country": "Cuba",
+    "title": "Moradores cubanos no Panamá apoiam transformações econômicas",
+    "summary": "Ciudad de Panamá, 20 jun (Prensa Latina) La Asociación Martiana de Cubanos Residentes en Panamá (Amcrp) expresó hoy su respaldo a las medidas y transformaciones económicas aprobadas recientemente en la isla. O posto Residentes cubanos en Panamá respaldan tran",
+    "publishedAt": "2026-06-20T11:38:34.000Z",
+    "sourceName": "www.prensa-latina.cu",
+    "sourceUrl": "https://www.prensa-latina.cu/2026/06/20/residentes-cubanos-en-panama-respaldan-transformaciones-economicas/",
+    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2024%2F05%2Fsoporte-news-pl-1.jpg",
+    "permalink": "/noticias/cuba-moradores-cubanos-no-panama-apoiam-transformacoes-economicas.html"
   },
   {
     "country": "Cuba",
-    "title": "Apelo a um Compromisso Renovado com o Acesso dos Refugiados ao Trabalho Decente",
-    "summary": "Ginebra, 19 jun (Prensa Latina) De cara al Día Mundial del Refugiado, la Organización Internacional del Trabajo (OIT) hace hoy un llamado a renovar el compromiso con políticas que permitan a los refugiados y otras personas desplazadas forzosamente acceder al t",
-    "publishedAt": "2026-06-19T13:30:04.000Z",
+    "title": "La primera estrella, um filme sobre as proezas do futebol uruguaio",
+    "summary": "Montevidéu, 20 jun (Prensa Latina) Cuando Uruguai sueña en volver a ganar la Copa Mundial, las salas de cine proyectan aquí el filme La primera estrella, que cuenta la proeza dela selección celeste que conquistó los Juegos Olímpicos de 1924 en París.",
+    "publishedAt": "2026-06-20T11:37:03.000Z",
     "sourceName": "www.prensa-latina.cu",
-    "sourceUrl": "https://www.prensa-latina.cu/2026/06/19/piden-renovar-compromiso-para-acceso-de-refugiados-al-trabajo-decente/",
+    "sourceUrl": "https://www.prensa-latina.cu/2026/06/20/la-primera-estrella-una-pelicula-sobre-proeza-futbolistica-uruguaya/",
     "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2024%2F05%2Fsoporte-news-pl-1.jpg",
-    "permalink": "/noticias/cuba-apelo-a-um-compromisso-renovado-com-o-acesso-dos-refugiados-ao-trabalho-decente.html"
+    "permalink": "/noticias/cuba-la-primera-estrella-um-filme-sobre-as-proezas-do-futebol-uruguaio.html"
   },
   {
     "country": "Cuba",
-    "title": "Panamá acumula 47 mortes por gripe em 2026",
-    "summary": "Ciudad de Panamá, 19 jun (Prensa Latina) Panamá acumula 47 fallecimientos por influenza en lo que va de 2026, informó hoy el Ministerio de Salud (Minsa), al advertir que ningunode los decesos correspondió a personas vacunadas durante la temporada real. ",
-    "publishedAt": "2026-06-19T13:29:35.000Z",
+    "title": "Primeira Newsletter Esportiva",
+    "summary": "Estos son los titulares: O post Primer boletín de deportes apareceu pela primeira vez no Noticias Prensa Latina.",
+    "publishedAt": "2026-06-20T11:34:32.000Z",
     "sourceName": "www.prensa-latina.cu",
-    "sourceUrl": "https://www.prensa-latina.cu/2026/06/19/panama-acumula-47-muertes-por-influenza-en-2026/",
+    "sourceUrl": "https://www.prensa-latina.cu/2026/06/20/primer-boletin-de-deportes-812/",
     "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2024%2F05%2Fsoporte-news-pl-1.jpg",
-    "permalink": "/noticias/cuba-panama-acumula-47-mortes-por-gripe-em-2026.html"
-  },
-  {
-    "country": "Cuba",
-    "title": "EUA e Irã cancelam reunião na Suíça",
-    "summary": "Washington, 19 jun (Prensa Latina) Estados Unidos e Irán suspendieron una reunión prevista para este viernes en Suiza, en la que abordarían el cese de las operaciones militares y el levantamiento del bloqueo naval estadounidense, destaca hoy la prensa nacional",
-    "publishedAt": "2026-06-19T13:29:32.000Z",
-    "sourceName": "www.prensa-latina.cu",
-    "sourceUrl": "https://www.prensa-latina.cu/2026/06/19/estados-unidos-e-iran-cancelan-reunion-en-suiza/",
-    "imageUrl": "https://images.weserv.nl/?url=www.prensa-latina.cu%2Fwp-content%2Fuploads%2F2024%2F05%2Fsoporte-news-pl-1.jpg",
-    "permalink": "/noticias/cuba-eua-e-ira-cancelam-reuniao-na-suica.html"
+    "permalink": "/noticias/cuba-primeira-newsletter-esportiva.html"
   },
   {
     "country": "Laos",
-    "title": "Lançado projeto gratuito de cirurgia de fissura para pacientes carentes no Laos",
-    "summary": "O projeto foi iniciado pela Lancang-Mekong Development Foundation em 2026 e está sendo realizado em colaboração com o Hospital Mahosot no Laos e a Organização de Caridade “Sorriso da Mãe” da China.",
-    "publishedAt": "2026-06-19T13:35:46.889Z",
+    "title": "A principal escola partidária da China apresenta o modelo de governança e o combate à corrupção para a mídia internacional",
+    "summary": "Falando sob o tema “Histórias do Partido Comunista da China na Nova Era”, o professor Xie descreveu a instituição como a principal academia de liderança do país e um centro de pesquisa de políticas de alto nível, desempenhando um papel fundamental no treinamento de funcionários e colegas",
+    "publishedAt": "2026-06-20T11:58:13.456Z",
     "sourceName": "kpl.gov.la",
-    "sourceUrl": "https://kpl.gov.la/EN/detail.aspx?id=101702",
-    "imageUrl": "https://images.weserv.nl/?url=kpl.gov.la%2FMedia%2FUpload%2FNews%2FHot%2F2026%2F06%2F19%2F725588657_1041377738453574_6744122565000759721_n.jpg",
-    "permalink": "/noticias/laos-lancado-projeto-gratuito-de-cirurgia-de-fissura-para-pacientes-carentes-no-laos.html"
+    "sourceUrl": "https://kpl.gov.la/EN/detail.aspx?id=101718",
+    "imageUrl": "https://images.weserv.nl/?url=kpl.gov.la%2FMedia%2FUpload%2FNews%2FHot%2F2026%2F06%2F20%2FIMG-20260618-WA0087.jpg",
+    "permalink": "/noticias/laos-a-principal-escola-partidaria-da-china-apresenta-o-modelo-de-governanca-e-o-combate-a-corrupcao-para-a-midia-intern.html"
   }
 ]
